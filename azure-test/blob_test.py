@@ -5,6 +5,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, _
 
 CONNECT_STR = "DefaultEndpointsProtocol=https;AccountName=cs5412finalproject;AccountKey=BCKE/Fy88RbuRUs5ol6BMMGa5D6pcSG1+Ly2lXJS4JIbmivT1rc7Ok7hBYfcNIZ78kPiRk+hO2HG+ASt9o9mhQ==;EndpointSuffix=core.windows.net"
 
+
 def read_a_blob(container, blob):
     """
     get the raw bytes from the blob storage
