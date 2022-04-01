@@ -11,7 +11,8 @@
         "units"; dict           a list of unit ID that belong to this user
                 key - value : unitID - {
                                         "building_name": BUILDING_NAME,
-                                        "unit_number": UNIT_NUMBER }
+                                        "unit_number": UNIT_NUMBER
+                                        }
 
     [Guest Schema]
         "first_name": str
@@ -25,14 +26,15 @@
         "address": str
         "unit_number": str
         "tenants": dict         a dict of tenants that in this unit
-                    { email: objectID }
-        "guests": dict          a dict of guests that in this unit
-                    { first_name: objectID }
+                    { email: objectID
+                    }
+
 
     [Record Schema]
         "unit": str             the Object ID of the unit that this record belongs to
         "face_id": str          the face ID of this record
-        "face_img": str         the path of query image in Blob
+        "face_img": str         the blob name of query image
+        "ref_img": str          the blob name of support image (if exists)
         "verified": bool        valid verification or not
         "identity_type": str    the type of the person, can be: "tenant", "guest", "unknown"
 
@@ -65,7 +67,6 @@ def unit_schema_check(data: dict):
     assert "address" in data.keys() and type(data['address']) == str
     assert "unit_number" in data.keys() and type(data['unit_number']) == str
     assert "tenants" in data.keys() and type(data['tenants']) == dict
-    assert "guests" in data.keys() and type(data["guests"]) == dict
     return True
 
 

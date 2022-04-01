@@ -9,8 +9,6 @@ from ..server_functions.jwt import jwt_utils
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
     # response body and header
     res_headers = {'Content-Type': 'application/json'}
     res_body = {}
@@ -19,7 +17,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     img = req.files['img']
     token = req.headers.get('x-access-token')
     if token is None:
-        res_body['message'] = "You need to login before this operation"
+        res_body['message'] = "Token invalid. You need to login before this operation"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
     if img is None:
         res_body['message'] = "You must provide an image"

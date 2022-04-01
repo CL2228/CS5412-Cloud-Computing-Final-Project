@@ -17,6 +17,7 @@
 from pymongo import MongoClient
 from bson import ObjectId
 from ..config import cosmosDBString, localMongoString, mongoDatabaseName
+# from functions.server_functions.config import cosmosDBString, localMongoString, mongoDatabaseName
 
 mongo_client = MongoClient(cosmosDBString)
 
@@ -106,6 +107,8 @@ def query_one(collection_name: str,
     try:
         database = mongo_client[database_name]
         collection = database[collection_name]
+        if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
+            query_dict['_id'] = ObjectId(query_dict['_id'])
         query_result = collection.find_one(query_dict)
         if query_result is None:
             return False, "Data Not Found"
@@ -141,14 +144,9 @@ def update_one(collection_name: str,
         return False, ex
 
 
+
+
 if __name__ == "__main__":
-    info = {
-        "email": "cl2228@cornell.edu",
-        "first_name": "Chenghui",
-        "last_name": "Li"
-    }
+    query = {'_id': ObjectId("62470e90a14653d66596a203")}
+    print(query_one("tenants", query))
 
-    print(insert_with_dup_check("user", info, ['email']))
-
-    my_dict = {"email": "cl2228@cornell.edu"}
-    print(query_one("user", my_dict))
