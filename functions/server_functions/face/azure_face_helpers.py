@@ -1,7 +1,7 @@
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person, QualityForRecognition
-from .config import azureFaceEndpoint, azureFaceKey
+from ..config import azureFaceEndpoint, azureFaceKey
 
 face_client = FaceClient(azureFaceEndpoint, CognitiveServicesCredentials(azureFaceKey))
 

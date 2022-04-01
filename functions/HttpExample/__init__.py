@@ -2,7 +2,7 @@ import logging
 
 import azure.functions as func
 
-from ..server_functions import azure_blob_helpers
+from ..server_functions.blob import azure_blob_helpers
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

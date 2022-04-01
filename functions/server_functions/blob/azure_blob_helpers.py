@@ -1,4 +1,4 @@
-from .config import azureStorageConnectString
+from ..config import azureStorageConnectString
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, ContentSettings
 
 
