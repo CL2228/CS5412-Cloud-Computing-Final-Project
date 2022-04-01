@@ -15,11 +15,11 @@ def get_faceId_with_url(url: str):
     try:
         detected_faces = face_client.face.detect_with_url(url)
         if not detected_faces:
-            return None
+            return False, "No face detected"
         face_id = detected_faces[0].face_id
-        return face_id
+        return True, str(face_id)
     except Exception as ex:
-        return ex
+        return False, str(ex)
 
 
 def get_faceId_with_stream(stream):
@@ -34,11 +34,11 @@ def get_faceId_with_stream(stream):
     try:
         detected_faces = face_client.face.detect_with_stream(stream)
         if not detected_faces:
-            return None
+            return False, "No face detected"
         face_id = detected_faces[0].face_id
-        return face_id
+        return True, str(face_id)
     except Exception as ex:
-        return ex
+        return False, str(ex)
 
 
 if __name__ == "__main__":

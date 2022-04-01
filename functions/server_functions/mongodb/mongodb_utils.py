@@ -64,7 +64,6 @@ def check_duplicate(collection_name: str,
         return True
 
 
-
 def insert_with_dup_check(collection_name: str,
                           data: dict,
                           check_keys: list,
@@ -118,13 +117,24 @@ def query_one(collection_name: str,
 ############################################################################
 # Update Data Utilities
 ############################################################################
-def update_one(collection_name: str, original_data: dict, update_data: dict, database_name: str = mongoDatabaseName):
+def update_one(collection_name: str,
+               original_data: dict,
+               update_data: dict,
+               database_name: str = mongoDatabaseName):
+    """
+        update a piece of data in mongoDB
+    :param collection_name: collection name
+    :param original_data:   filter
+    :param update_data:     updated data (K-V)
+    :param database_name:
+    :return: [T / F, message]
+    """
     try:
         database = mongo_client[database_name]
         collection = database[collection_name]
         update_vals = {"$set": update_data}
         update_res = collection.update_one(original_data, update_vals)
-        if not update_res['updateExisting']:
+        if not update_res.raw_result['updatedExisting']:
             return False, "Data doesn't exist or it is stale!"
         return True, "Updated successfully"
     except Exception as ex:

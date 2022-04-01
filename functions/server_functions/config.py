@@ -25,7 +25,7 @@ blobDefaultContainer = "cs5412-cl2228"
 # JWT configuration
 ############################################################################
 jwtSecretKey = "cs5412-cl2228"
-jwtExpireMinutes = 10
+jwtExpireMinutes = 180
 jwtGuestExpireMinutes = 30
 jwtAlgorithm = "HS256"
 

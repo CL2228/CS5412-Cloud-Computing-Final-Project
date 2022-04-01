@@ -1,8 +1,10 @@
 from ..config import azureStorageConnectString, blobDefaultContainer
+# from functions.server_functions.config import azureStorageConnectString, blobDefaultContainer
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, ContentSettings
+import uuid
 
 
-def read_blob(blob_name:str, container_name: str = blobDefaultContainer):
+def read_blob(blob_name: str, container_name: str = blobDefaultContainer):
     """
         get blob data
     :param blob_name: the blob name
@@ -31,7 +33,7 @@ def write_blob(blob_name: str, data, container_name: str = blobDefaultContainer,
     """
     try:
         blob_service_client = BlobServiceClient.from_connection_string(azureStorageConnectString)
-        container_client = blob_service_client.get_container_client(container)
+        container_client = blob_service_client.get_container_client(container_name)
         if not container_client.exists():
             container_client.create_container()
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
@@ -57,19 +59,38 @@ def delete_blob(blob_name: str, container_name: str = blobDefaultContainer):
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
         if not blob_client.exists():
             return False, "Blob doesn't exist"
+        blob_client.delete_blob()
         return True, "Successfully deleted that blob"
     except Exception as ex:
         return False, ex
 
 
+def generate_file_name(suffix: str = None):
+    """
+        generate unique name for blob
+    :param suffix: the suffix of the file
+    :return: unique names
+    """
+    name = str(uuid.uuid4())
+    if suffix is not None:
+        name += suffix
+    return name
 
 
-
-
-
+def check_img_file_suffix(filename: str):
+    """
+        check image format
+    :param filename: [T / F, suffix without '.' / message]
+    :return:
+    """
+    img_extensions = {'jpg', 'png', 'jpeg'}
+    suffix = filename.rsplit('.', 1)[1].lower()
+    if '.' not in filename or suffix not in img_extensions:
+        return False, "File format not allowed"
+    return True, suffix
 
 
 if __name__ == "__main__":
     # data_status, data = read_blob("test-container", "test.jpg")
     # print(data)
-    print("hi")
+    print(check_img_file_suffix("test.erw.jpg"))

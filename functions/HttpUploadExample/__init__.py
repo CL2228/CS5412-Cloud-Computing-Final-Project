@@ -13,7 +13,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info(file.filename)
     logging.info("\n\n")
 
-    state, message = azure_blob_helpers.write("test-container", "test.jpg", file, 'image/jpeg')
+    state, message = azure_blob_helpers.write_blob("test.jpg", file, content_type='image/jpeg')
     if state:
         return func.HttpResponse("Uploaded successfully")
     else:
