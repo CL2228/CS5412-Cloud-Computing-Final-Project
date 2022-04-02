@@ -44,9 +44,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # detect face and get faceID
     face_detect_status, face_id = azure_face_helpers.get_faceId_with_stream(BytesIO(img_bytes))
-    res_body['message'] = face_id
     # if not face detected
     if not face_detect_status:
+        res_body['message'] = face_id
         return func.HttpResponse(json.dumps(res_body), status_code=400, headers=res_headers)
 
     # upload the image to Blob

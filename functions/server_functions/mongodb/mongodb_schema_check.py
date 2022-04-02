@@ -58,7 +58,7 @@ def guest_schema_check(data: dict):
     assert "token" in data.keys() and type(data['token']) == str
     # assert "face_id" in data.keys() and type(data['face_id']) == str
     # assert "face_img" in data.keys() and type(data['face_img']) == str
-    assert "uint" in data.keys() and type(data['unit']) == str
+    assert "unit" in data.keys() and type(data['unit']) == str
     return True
 
 

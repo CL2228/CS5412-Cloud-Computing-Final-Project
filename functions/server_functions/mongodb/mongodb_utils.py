@@ -144,9 +144,39 @@ def update_one(collection_name: str,
         return False, ex
 
 
+############################################################################
+# Update Data Utilities
+############################################################################
+def delete_one(collection_name: str,
+               original_data: dict,
+               database_name: str = mongoDatabaseName):
+    """
+    delete one piece of data based on filter
+    :param collection_name: name of collection
+    :param original_data:   filter, usually is the original data, for accuracy
+    :param database_name:   [T / F, message]
+    :return:
+    """
+    try:
+        database = mongo_client[database_name]
+        collection = database[collection_name]
+        delete_res = collection.delete_one(original_data).raw_result['n'] > 0
+        if delete_res:
+            return True, "Deleted successfully"
+        else:
+            return False, "Data doesn't exist"
+    except Exception as ex:
+        return False, ex
+
+
+def delete_many(collection_name: str,
+                filter_dict: dict,
+                database_name: str = mongoDatabaseName):
+    pass
 
 
 if __name__ == "__main__":
-    query = {'_id': ObjectId("62470e90a14653d66596a203")}
-    print(query_one("tenants", query))
+    # query = {'_id': ObjectId("62470e90a14653d66596a203")}
+    # print(query_one("tenants", query))
+    print(delete_one("units", {"unit_number": "G01"}))
 
