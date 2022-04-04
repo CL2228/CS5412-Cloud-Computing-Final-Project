@@ -26,7 +26,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     #          status_code=200
     #     )
 
-    data_status, data = azure_blob_helpers.read_blob("test-container", "test.jpg")
+    data_status, data = azure_blob_helpers.read_blob("test.jpg")
     if not data_status:
         return func.HttpResponse("Data not found", status_code=404)
 

@@ -29,3 +29,12 @@ jwtExpireMinutes = 180
 jwtGuestExpireMinutes = 30
 jwtAlgorithm = "HS256"
 
+
+############################################################################
+# Email configuration
+############################################################################
+SMTP_SERVER = "smtp.mail.yahoo.com"
+SMTP_PORT = 587
+SMTP_USERNAME = "cs5412.cl2228@yahoo.com"
+SMTP_PASSWORD = "jwmavztrdbudzxgb"
+EMAIL_FROM = "cs5412.cl2228@yahoo.com"

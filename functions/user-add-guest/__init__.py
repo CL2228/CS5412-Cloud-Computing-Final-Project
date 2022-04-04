@@ -1,9 +1,7 @@
-import imp
 import json
 import logging
 import azure.functions as func
 from io import BytesIO
-from ..server_functions.jwt import jwt_utils
 from ..server_functions.mongodb import mongodb_utils
 from ..server_functions.blob import azure_blob_helpers
 from ..server_functions.face import azure_face_helpers
