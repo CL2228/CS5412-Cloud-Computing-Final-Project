@@ -27,6 +27,7 @@ blobDefaultContainer = "cs5412-cl2228"
 jwtSecretKey = "cs5412-cl2228"
 jwtExpireMinutes = 180
 jwtGuestExpireMinutes = 30
+jwtLoginExpireMinutes = 30
 jwtAlgorithm = "HS256"
 
 

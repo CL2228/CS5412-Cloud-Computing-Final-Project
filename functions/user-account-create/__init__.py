@@ -86,10 +86,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 return send_token(req_body)
             if req_body['req-type'] == "verify":
                 return verify(req_body)
-        except Exception as ex:
+            res_body['message'] = "Invalid request type"
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+        except Exception:
             res_body['message'] = "Request must have a 'req-type' to indicate type"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-    except Exception as ex:
+    except Exception:
         res_body['message'] = "Request must have a JSON body"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
 

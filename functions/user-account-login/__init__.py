@@ -4,6 +4,7 @@ import azure.functions as func
 
 from ..server_functions.mongodb import mongodb_utils
 from ..server_functions.jwt.jwt_utils import generate_jwt
+from ..server_functions.config import jwtLoginExpireMinutes
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -11,43 +12,47 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     res_body = {}
     res_headers = {'Content-Type': 'application/json'}
+    try:
+        req_body = req.get_json()
+        email = req_body['email']
+        password = req_body['password']
 
-    email = req.form.get("email")
-    password = req.form.get("password")
+        query_status, query_data = mongodb_utils.query_one("tenants", {"email": email})
 
-    if email is None or password is None:
-        res_body['message'] = "Please provide email and password"
+        # exceptions, either internal errors or user not found
+        if not query_status:
+            if isinstance(query_data, Exception):
+                res_body['message'] = "Server Errors"
+                return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
+            res_body['message'] = "User not found, please register before login"
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=404)
+
+        # wrong password
+        if query_data['password'] != password:
+            res_body['message'] = "Wrong password"
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+
+        # verification passed, generate a JWT
+        token = generate_jwt({"email": email, "_id": str(query_data['_id'])}, expire_delta=jwtLoginExpireMinutes)
+        res_body['access-token'] = token
+        account = {'email': email,
+                   'first_name': query_data['first_name'],
+                   'last_name': query_data['last_name'],
+                   'face_img': query_data['face_img'],
+                   'units': query_data['units']}
+        res_body['data'] = account
+        return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=200)
+
+    except ValueError:
+        res_body['message'] = "The body of Request should be JSON!"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-
-    query_status, query_data = mongodb_utils.query_one("tenants", {"email": email})
-    
-    logging.info("status: {};  data:{}".format(query_status, query_data))
-
-    # exceptions, either internal errors or user not found
-    if not query_status:
-        if isinstance(query_data, Exception):
-            res_body['message'] = "Server Errors"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
-        res_body['message'] = "User not found, please register before login"
-        return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=404)
-
-    # wrong answer
-    if query_data['password'] != password:
-        res_body['message'] = "Wrong password"
+    except KeyError:
+        res_body['message'] = "Missing information"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+    except Exception:
+        res_body['message'] = "Internal errors"
+        return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
 
-    logging.info(str(query_data['_id']))
-
-    # verification passed, generate a JWT
-    token = generate_jwt({"email": email, "_id": str(query_data['_id'])})
-    res_body['access-token'] = token
-    account = {'email': email,
-               'first_name': query_data['first_name'],
-               'last_name': query_data['last_name'],
-               'face_img': query_data['face_img'],
-               'units': query_data['units']}
-    res_body['data'] = account
-    return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=200)
 
 
 
