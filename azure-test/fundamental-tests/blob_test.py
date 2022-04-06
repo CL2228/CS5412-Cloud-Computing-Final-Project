@@ -30,8 +30,10 @@ def read_a_blob(container, blob):
 def write_a_blob(container, blob, data):
     try:
         blob_service_client = BlobServiceClient.from_connection_string(CONNECT_STR)
-
-        # contaienr_client = blob_service_client.create_container(container)
+        # container_client = blob_service_client.create_container(container)
+        # print(container_client.exists())
+        # if not container_client.exists():
+        #     blob_service_client.create()
         blob_client = blob_service_client.get_blob_client(container=container, blob=blob)
         blob_client.upload_blob(data)
 
@@ -41,8 +43,8 @@ def write_a_blob(container, blob, data):
 
 
 if __name__ == "__main__":
-    # img_file = open("./sample.jpg", "rb")
-    # write_a_blob("test-container", "test-img", img_file)
+    img_file = open("./sample.jpg", "rb")
+    write_a_blob("test-container", "tenants/myfolder/test-img.jpg", img_file)
     # try:
     #     blob_service_client = BlobServiceClient.from_connection_string(CONNECT_STR)
     #     container_client = blob_service_client.get_container_client("test-container")
@@ -57,11 +59,11 @@ if __name__ == "__main__":
     #     print("Exception:")
     #     print(ex)
 
-    blob_service_client = BlobServiceClient.from_connection_string(CONNECT_STR)
-    container_client = blob_service_client.get_container_client("my-container")
-    blob_client = blob_service_client.get_blob_client("test-container", "test.jpg")
-    # blobs = container_client.list_blobs()
-    print(container_client.exists())
-    if not container_client.exists():
-        container_client.create_container()
+    # blob_service_client = BlobServiceClient.from_connection_string(CONNECT_STR)
+    # container_client = blob_service_client.get_container_client("my-container")
+    # blob_client = blob_service_client.get_blob_client("test-container", "test.jpg")
+    # # blobs = container_client.list_blobs()
+    # print(container_client.exists())
+    # if not container_client.exists():
+    #     container_client.create_container()
 

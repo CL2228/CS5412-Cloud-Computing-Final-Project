@@ -21,7 +21,7 @@ def read_blob(blob_name: str, container_name: str = blobDefaultContainer):
         return False, ex
 
 
-def write_blob(blob_name: str, data, container_name: str = blobDefaultContainer, content_type: str=None):
+def write_blob(blob_name: str, data, container_name: str = blobDefaultContainer, content_type: str = None):
     """
         write data to a blob
 
@@ -65,13 +65,16 @@ def delete_blob(blob_name: str, container_name: str = blobDefaultContainer):
         return False, ex
 
 
-def generate_file_name(suffix: str = None):
+def generate_file_name(prefix: str = None, suffix: str = None):
     """
         generate unique name for blob
+    :param prefix: prefix of the file name, usually the path of that file
     :param suffix: the suffix of the file
     :return: unique names
     """
     name = str(uuid.uuid4())
+    if prefix is not None:
+        name = prefix + name
     if suffix is not None:
         name += suffix
     return name
