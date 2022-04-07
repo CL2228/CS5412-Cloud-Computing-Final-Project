@@ -1,5 +1,22 @@
 """
     create a new user (tenant) account
+
+    Trigger: HTTP Request
+    Output: HTTP Response
+
+    BODY: JSON
+        'req-type': request type, can only be "send_token" or "verify"
+
+    'send_token' branch:
+        'email': str
+
+    'verify' branch:
+        'email': str
+        'password': str
+        'token': str
+        'first-name': str
+        'last-name': str
+
 """
 
 import logging

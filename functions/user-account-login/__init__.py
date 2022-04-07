@@ -1,3 +1,27 @@
+"""
+    Log in function
+
+    Trigger: HTTP Request
+    Output: HTTP Response
+
+    BODY: JSON
+    'email': str
+    'password': str
+
+    Return: HTTP Response with JSON body
+    'access-token': the token of this login operation
+    'data': an object that contains the information of the account
+        'email': str,
+        'first_name': str,
+        'last_name': str,
+        'face_img': str,
+        'units': an object contains basic information of a unit
+            'unit_id':
+                'building_name': str,
+                'unit_number': str
+
+"""
+
 import logging
 import json
 import azure.functions as func
@@ -52,29 +76,3 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except Exception:
         res_body['message'] = "Internal errors"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

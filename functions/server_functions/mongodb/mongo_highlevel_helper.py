@@ -6,6 +6,14 @@ def insert_unit(building_name: str,
                 address: str,
                 unit_number: str,
                 tenants: dict):
+    """
+    insert a piece of unit data to mongoDB
+    :param building_name:
+    :param address:
+    :param unit_number:
+    :param tenants:
+    :return: [T / F, message]
+    """
     data = {
         "building_name": building_name,
         "address": address,
@@ -15,7 +23,7 @@ def insert_unit(building_name: str,
     CHECK_FUNCTIONS['unit'](data)
 
     if mongodb_utils.check_duplicate("units", data):
-        return False
+        return False, "Unit already existed"
 
     return mongodb_utils.insert("units", data)
 

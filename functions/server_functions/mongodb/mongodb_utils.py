@@ -12,6 +12,7 @@
     [guest]:        guests
     [unit]:         units
     [record]:       records
+    [devices]:      devices
 """
 
 from pymongo import MongoClient

@@ -1,3 +1,17 @@
+"""
+    Update a user's verification photo, that photo must contain a face (and only one face)
+
+    Trigger: HTTP Request
+    Output: HTTP Response
+
+    BODY: FORM
+    'img': an image file whose extension must be 'jpg', 'jpeg', 'png', server_functions/check azure_blob_helper.py for reference
+
+    Headers:
+    'x-access-token': a token for the verification of the user
+
+"""
+
 import azure.functions as func
 import json
 from io import BytesIO

@@ -1,5 +1,20 @@
+"""
+    Adding-guest function
+
+    Trigger: HTTP Request
+    Output: HTTP Response
+
+    Headers:
+    'x-access-token': str, a token for identification
+
+    BODY: FORM
+    'img': an image file for that guest,
+    'first-name': str,
+    'last-name': str,
+    'unit-id': str
+"""
+
 import json
-import logging
 import azure.functions as func
 from io import BytesIO
 from ..server_functions.mongodb import mongodb_utils
