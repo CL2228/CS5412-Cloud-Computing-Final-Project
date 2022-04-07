@@ -39,5 +39,3 @@ jwtLoginExpireMinutes = 30
 jwtGuestExpireMinutes = 30
 jwtSecretKey = "cs5412-cl2228"
 jwtAlgorithm = "HS256"
-
-test_commit = "ewr"
