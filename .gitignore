@@ -1,0 +1,4 @@
+# git ignore list
+.vscode
+.idea
+functions/server_functions/config.py

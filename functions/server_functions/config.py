@@ -1,3 +1,4 @@
+
 ######################################################
 # CosmosDB Database Configuration
 ######################################################
@@ -11,6 +12,7 @@ mongoDatabaseName = "cs5412-cl2228"
 ######################################################
 azureStorageConnectString = "DefaultEndpointsProtocol=https;AccountName=cs5412finalproject;AccountKey=IY/FhO+zJy+jui2TmIcHKp3uyWEZ/9eAxx/DnSsa0edvVOFIJnJrSiEKLYxUCXUBy8HRieupaXfg+AStBlMzjg==;EndpointSuffix=core.windows.net"
 blobDefaultContainer = "cs5412-cl2228"
+
 
 ######################################################
 # Azure Face Configuration
