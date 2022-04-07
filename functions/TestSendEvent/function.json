@@ -1,0 +1,22 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "eventHub",
+      "direction": "out",
+      "name": "$return",
+      "connection": "cs5412finalprojecteventhub_RootManageSharedAccessKey_EVENTHUB",
+      "eventHubName": "test-event"
+    }
+  ]
+}
