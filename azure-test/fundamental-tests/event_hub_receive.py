@@ -22,7 +22,7 @@ async def main():
 
     # Create a consumer client for the event hub.
     client = EventHubConsumerClient.from_connection_string("Endpoint=sb://cs5412-final-project-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=+Q23YiwBj5SykbMV4S79zjNQ4r58HCGAKYs2o3f1bvg=",
-                                                           consumer_group="$Default", eventhub_name="test-event", checkpoint_store=checkpoint_store)
+                                                           consumer_group="$Default", eventhub_name="verification-request-event", checkpoint_store=checkpoint_store)
     async with client:
         # Call the receive method. Read from the beginning of the partition (starting_position: "-1")
         await client.receive(on_event=on_event,  starting_position="-1")
