@@ -12,4 +12,3 @@ if __name__ == "__main__":
     # print(event_data.body_as_json())
     # print(event_data.enqueued_time)
     print(pickle.loads(bts))
-
