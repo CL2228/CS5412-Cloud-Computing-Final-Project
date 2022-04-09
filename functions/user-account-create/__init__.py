@@ -76,7 +76,6 @@ def verify(req_body: dict) -> func.HttpResponse:
         "password": password,
         "first_name": first_name,
         "last_name": last_name,
-        "face_id": None,
         "face_img": None,
         "units": {}
     }

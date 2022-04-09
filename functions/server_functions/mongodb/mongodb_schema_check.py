@@ -46,7 +46,6 @@ def tenant_schema_check(data: dict):
     assert "last_name" in data.keys() and type(data['last_name']) == str
     assert "email" in data.keys() and type(data['email']) == str
     assert "password" in data.keys() and type(data['password']) == str
-    assert "face_id" in data.keys() and type(data['face_id']) == str or data['face_id'] is None
     assert "face_img" in data.keys() and type(data['face_img']) == str or data['face_img'] is None
     assert "units" in data.keys() and type(data['units']) == dict
     return True

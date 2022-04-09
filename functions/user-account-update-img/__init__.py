@@ -73,7 +73,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse(json.dumps(res_body), status_code=500, headers=res_headers)
 
         # update account information in cosmosDB
-        update_data = {'face_id': str(face_id), 'face_img': new_img_blob}
+        update_data = {'face_img': new_img_blob}
         update_status, _ = mongodb_utils.update_one("tenants", account, update_data)
         if not update_status:
             azure_blob_helpers.delete_blob(new_img_blob)
