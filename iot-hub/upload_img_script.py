@@ -52,7 +52,7 @@ async def upload_img_from_device(connection_string: str, file_path: str):
                                                  content_settings=ContentSettings(content_type='image/jpeg'))
                 print(result)
 
-        event_payload = {"blob_name": blob_name, "unit_id": unit_id}
+        event_payload = {"blob_name": blob_name, "unit_id": unit_id, "device_key": device_data['device_key']}
         await event_hub_helper.send_event("verification-request-event", event_payload)
         return True, "success"
     except FileNotFoundError:
