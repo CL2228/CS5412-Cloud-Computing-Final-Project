@@ -2,6 +2,7 @@ from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person, QualityForRecognition
 from ..config import azureFaceEndpoint, azureFaceKey
+# from functions.server_functions.config import azureFaceEndpoint, azureFaceKey
 
 face_client = FaceClient(azureFaceEndpoint, CognitiveServicesCredentials(azureFaceKey))
 
@@ -42,4 +43,5 @@ def get_faceId_with_stream(stream):
 
 
 if __name__ == "__main__":
-    print(azureFaceKey)
+    res = get_faceId_with_url("https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/970c3d9d-e3ea-4011-aa23-befb989a46c8.jpg")
+    print(res)

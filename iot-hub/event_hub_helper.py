@@ -28,5 +28,5 @@ async def send_event(event_hub_name: str, payload, conn_str: str = EVENT_HUB_STR
         return False, ex
 
 if __name__ == "__main__":
-    res = asyncio.run(send_event("test-event", "message2", serialization=False))
+    res = asyncio.run(send_event("verification-request-event", "cl2228", serialization=False))
     print(res)

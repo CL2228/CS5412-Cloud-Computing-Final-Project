@@ -17,8 +17,8 @@ blobDefaultContainer = "cs5412-cl2228"
 ######################################################
 # Azure Face Configuration
 ######################################################
-azureFaceEndpoint = "https://cs5412-final-project-face.cognitiveservices.azure.com/"
-azureFaceKey = "76ee4fb193164c268cbc04de33df7054"
+azureFaceEndpoint = "https://cs5412-final-project-face-paid.cognitiveservices.azure.com/"
+azureFaceKey = "f15b29c9e66b461da5edf600cf819b06"
 
 
 ######################################################
