@@ -21,25 +21,21 @@ async def upload_img_from_device(connection_string: str, file_path: str):
 
     try:
         await device_client.connect()
-        blob_name = os.path.basename(file_path)
-        storage_info = await device_client.get_storage_info_for_blob(blob_name)
-        # print(storage_info)
-
-        # check image format and get suffix
-        check_img, suffix = azure_blob_helpers.check_img_file_suffix(PATH_OF_FILE)
-        if not check_img:
-            return False, "Not an image"
-
         # check whether the device is registered and get the unit id of this device
-        device_existed, device_data = mongodb_utils.query_one("devices", {"devices_key": DEVICE_KEY})
+        device_existed, device_data = mongodb_utils.query_one("devices", {"device_key": DEVICE_KEY})
         if not device_existed:
             return False, "Device not registered"
 
+        # check image format and get suffix
+        check_img, suffix = azure_blob_helpers.check_img_file_suffix(file_path)
+        if not check_img:
+            return False, "Not an image"
         # get the unit ID and generate unique file name
         unit_id = device_data['unit_id']
-        img_name = azure_blob_helpers.generate_file_name(prefix="records/" + unit_id + "/", suffix="." + suffix)
-        storage_info['blobName'] = img_name
-        print(storage_info)
+        blob_name = azure_blob_helpers.generate_file_name(prefix="records/", suffix="." + suffix)
+
+        storage_info = await device_client.get_storage_info_for_blob(blob_name)
+        print(storage_info['blobName'])
 
         sas_url = "https://{}/{}/{}{}".format(
             storage_info['hostName'],
@@ -56,6 +52,9 @@ async def upload_img_from_device(connection_string: str, file_path: str):
                                                  content_settings=ContentSettings(content_type='image/jpeg'))
                 print(result)
 
+        event_payload = {"blob_name": blob_name, "unit_id": unit_id}
+        await event_hub_helper.send_event("verification-request-event", event_payload)
+        return True, "success"
     except FileNotFoundError:
         return False, "File Not Found."
     except Exception as ex:
@@ -66,4 +65,4 @@ async def upload_img_from_device(connection_string: str, file_path: str):
 
 
 if __name__ == "__main__":
-    asyncio.run(upload_img_from_device(DEVICE_CONN_STR, PATH_OF_FILE))
+    print(asyncio.run(upload_img_from_device(DEVICE_CONN_STR, PATH_OF_FILE)))
