@@ -39,3 +39,9 @@ jwtLoginExpireMinutes = 30
 jwtGuestExpireMinutes = 30
 jwtSecretKey = "cs5412-cl2228"
 jwtAlgorithm = "HS256"
+
+
+######################################################
+# Query URLs
+######################################################
+imgBaseUrl = "http://localhost:7071/api/img-get?name="
