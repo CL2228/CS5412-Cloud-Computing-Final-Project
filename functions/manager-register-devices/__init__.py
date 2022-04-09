@@ -11,6 +11,8 @@
     'unit_id': the unit ID, usually is the Object ID of Unit in MongoDB
 
 """
+import logging
+
 import azure.functions as func
 import json
 from ..server_functions.mongodb import mongodb_utils
@@ -25,7 +27,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         device_id = req_body['azure-iothub-device-id']
         unit_id = req_body['unit-id']
 
-
         unit_found, _ = mongodb_utils.query_one("units", {'_id': unit_id})
         if not unit_found:
             res_body['message'] = "Unit not found, please check the ID again"
@@ -35,7 +36,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         if device_found:
             insert_status, _ = mongodb_utils.update_one("devices", device_data, {"unit_id": unit_id})
         else:
-            device_data = {"devices_key": device_key, "unit_id": unit_id, "device_id": device_id}
+            device_data = {"device_key": device_key, "unit_id": unit_id, "device_id": device_id}
             insert_status, _ = mongodb_utils.insert("devices", device_data)
         if not insert_status:
             res_body['message'] = "Internal errors. Please try again"
