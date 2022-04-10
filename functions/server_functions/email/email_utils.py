@@ -4,7 +4,11 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-def send(subject: str, to: str, content, content_type: str = 'plain', debug: bool = True):
+def send(subject: str,
+         to: str,
+         content,
+         content_type: str = 'plain',
+         debug: bool = True):
     msg = MIMEText(content, content_type)
     msg['Subject'] = subject
     msg['From'] = EMAIL_FROM
