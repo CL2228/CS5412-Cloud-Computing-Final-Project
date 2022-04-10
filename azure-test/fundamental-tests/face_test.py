@@ -67,6 +67,7 @@ if __name__ == "__main__":
 
     verify_result_diff = face_client.face.verify_face_to_face("f92c9821-fa9a-44c1-80b1-d5aaff4e9976",
                                                               "f92c9821-fa9a-44c1-80b1-d5aaff4e9976")
+    print(verify_result_diff.confidence)
     print('Faces from {} & {} are of the same person, with confidence: {}'
           .format("face1", "face2", verify_result_diff.confidence)
           if verify_result_diff.is_identical

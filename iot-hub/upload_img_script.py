@@ -21,6 +21,8 @@ async def upload_img_from_device(connection_string: str, file_path: str):
 
     try:
         await device_client.connect()
+
+
         # check whether the device is registered and get the unit id of this device
         device_existed, device_data = mongodb_utils.query_one("devices", {"device_key": DEVICE_KEY})
         if not device_existed:
@@ -33,6 +35,8 @@ async def upload_img_from_device(connection_string: str, file_path: str):
         # get the unit ID and generate unique file name
         unit_id = device_data['unit_id']
         blob_name = azure_blob_helpers.generate_file_name(prefix="records/", suffix="." + suffix)
+
+        print("reach here: {}".format(blob_name))
 
         storage_info = await device_client.get_storage_info_for_blob(blob_name)
         print(storage_info['blobName'])
@@ -52,7 +56,7 @@ async def upload_img_from_device(connection_string: str, file_path: str):
                                                  content_settings=ContentSettings(content_type='image/jpeg'))
                 print(result)
 
-        event_payload = {"blob_name": blob_name, "unit_id": unit_id, "device_key": device_data['device_key']}
+        event_payload = {"blob_name": storage_info['blobName'], "unit_id": unit_id, "device_id": device_data['device_id']}
         await event_hub_helper.send_event("verification-request-event", event_payload)
         return True, "success"
     except FileNotFoundError:

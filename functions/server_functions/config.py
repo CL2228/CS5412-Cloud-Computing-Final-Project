@@ -34,9 +34,9 @@ EMAIL_FROM = "cs5412.cl2228@yahoo.com"
 ######################################################
 # JWT Configuration
 ######################################################
-jwtExpireMinutes = 180
-jwtLoginExpireMinutes = 30
-jwtGuestExpireMinutes = 30
+jwtExpireMinutes = 1800
+jwtLoginExpireMinutes = 1800
+jwtGuestExpireMinutes = 1800
 jwtSecretKey = "cs5412-cl2228"
 jwtAlgorithm = "HS256"
 
