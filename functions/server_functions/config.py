@@ -1,4 +1,3 @@
-
 ######################################################
 # CosmosDB Database Configuration
 ######################################################
@@ -39,6 +38,12 @@ jwtLoginExpireMinutes = 1800
 jwtGuestExpireMinutes = 1800
 jwtSecretKey = "cs5412-cl2228"
 jwtAlgorithm = "HS256"
+
+
+######################################################
+# EventHub Configuration
+######################################################
+eventHubRootConnectionString = "Endpoint=sb://cs5412-final-project-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=+Q23YiwBj5SykbMV4S79zjNQ4r58HCGAKYs2o3f1bvg="
 
 
 ######################################################
