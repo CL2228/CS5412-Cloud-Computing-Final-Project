@@ -28,5 +28,8 @@ async def send_event(event_hub_name: str, payload, conn_str: str = EVENT_HUB_STR
         return False, ex
 
 if __name__ == "__main__":
-    res = asyncio.run(send_event("verification-request-event", "cl2228", serialization=False))
+    event_body = {'device_id': "gates-hall-g01",
+                  'blob_name': "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
+                  'unit_id': "62475aaadd78bdc4e2448eb8"}
+    res = asyncio.run(send_event("verification-request-event", event_body))
     print(res)
