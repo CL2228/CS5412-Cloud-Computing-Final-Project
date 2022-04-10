@@ -118,6 +118,20 @@ def query_one(collection_name: str,
         return False, ex
 
 
+def query_many(collection_name: str,
+               query_dict: dict,
+               database_name: str = mongoDatabaseName):
+    try:
+        database = mongo_client[database_name]
+        collection = database[collection_name]
+        if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
+            query_dict['_id'] = ObjectId(query_dict['_id'])
+        query_result = list(collection.find(query_dict))
+        return len(query_result) > 0, query_result
+    except Exception as ex:
+        return False
+
+
 ############################################################################
 # Update Data Utilities
 ############################################################################
@@ -179,5 +193,5 @@ def delete_many(collection_name: str,
 if __name__ == "__main__":
     # query = {'_id': ObjectId("62470e90a14653d66596a203")}
     # print(query_one("tenants", query))
-    print(delete_one("units", {"unit_number": "G01"}))
-
+    # print(delete_one("units", {"unit_number": "G01"}))
+    print(query_many("guests", {}))
