@@ -42,6 +42,20 @@ def get_faceId_with_stream(stream):
         return False, str(ex)
 
 
+def verify_two_faces(face_id_1: str, face_id_2: str):
+    """
+    verify two faces based on their face IDs
+    :param face_id_1: str, face ID
+    :param face_id_2: str, face ID
+    :return: [T / F, confidence / exception]
+    """
+    try:
+        result = face_client.face.verify_face_to_face(face_id_1, face_id_2)
+        return result.is_identical, result.confidence
+    except Exception as ex:
+        return False, str(ex)
+
+
 if __name__ == "__main__":
-    res = get_faceId_with_url("https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/970c3d9d-e3ea-4011-aa23-befb989a46c8.jpg")
+    res = get_faceId_with_url("http://localhost:7071/api/img-get?name=gates-hall-g01/records/69a20fb2-6442-4fa6-ba6f-4bc02d4afeff.jpg")
     print(res)
