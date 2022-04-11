@@ -15,8 +15,29 @@
       "type": "queue",
       "direction": "out",
       "name": "msg",
-      "queueName": "outqueue",
+      "queueName": "core-verification",
       "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "eventHub",
+      "direction": "out",
+      "name": "writeRecordEventHub",
+      "connection": "cs5412finalprojecteventhub_CoreWriteRecords_EVENTHUB",
+      "eventHubName": "write-records-event"
+    },
+    {
+      "type": "eventHub",
+      "direction": "out",
+      "name": "sendEmailEventHub",
+      "connection": "cs5412finalprojecteventhub_CoreSendEmails_EVENTHUB",
+      "eventHubName": "send-emails-event"
+    },
+    {
+      "type": "eventHub",
+      "direction": "out",
+      "name": "notifyIotEventHub",
+      "connection": "cs5412finalprojecteventhub_CoreNotifyIotDevice_EVENTHUB",
+      "eventHubName": "notify-iot-device-event"
     }
   ]
 }

@@ -7,10 +7,15 @@ from ..server_functions.config import imgBaseUrl
 from ..server_functions.mongodb import mongodb_utils
 from ..server_functions.jwt import jwt_utils
 from ..server_functions.blob import azure_blob_helpers
+# from ..server_functions.eventhub import eventhub_utils
 from io import BytesIO
 
 
-def main(events: List[func.EventHubEvent], msg: func.Out[func.QueueMessage]):
+def main(events: List[func.EventHubEvent],
+         writeRecordEventHub: func.Out[bytes],
+         sendEmailEventHub: func.Out[bytes],
+         notifyIotEventHub: func.Out[bytes],
+         msg: func.Out[func.QueueMessage]):
     for event in events:
         body = dict(pickle.loads(event.get_body()))
         logging.info("---------------------------------------")
@@ -18,8 +23,16 @@ def main(events: List[func.EventHubEvent], msg: func.Out[func.QueueMessage]):
                      body)
         res_body = handle_one_event(event)
 
-        if type(res_body) == dict:
-            msg.set(res_body['verify_identity'])
+        if type(res_body) != dict:
+            msg.set(str(res_body))
+            continue
+        msg.set(res_body['verify_identity'])
+
+        writeRecordEventHub.set(pickle.dumps(res_body))
+        # notifyIotEventHub.set(pickle.dumps(res_body))
+        # if not res_body['verified']:
+        #     sendEmailEventHub.set(pickle.dumps(res_body))
+
         logging.info("RESULT---------------------------------------")
         logging.info(res_body)
 
@@ -41,7 +54,6 @@ def handle_one_event(event: func.EventHubEvent):
                 "reference_img": None,
                 "confidence": 0.0}
     try:
-        print("----------reach here")
         # basic response body
         body = dict(pickle.loads(event.get_body()))
         res_body['unit_id'] = body['unit_id']
@@ -54,9 +66,6 @@ def handle_one_event(event: func.EventHubEvent):
         if not query_face_detected:
             res_body['verify_identity'] = "Face not detected"
             return res_body
-
-        print("----UnitID: {}".format(body['unit_id']))
-        print("----FaceID: {}".format(query_face_id))
 
         # get unit information
         unit_found, unit_data = mongodb_utils.query_one("units", {'_id': body['unit_id']})
@@ -83,11 +92,8 @@ def handle_one_event(event: func.EventHubEvent):
                 res_body['reference_img'] = tenant_data['face_img']
                 return res_body
 
-        print("------Didn't find a tenant")
-
         # check guests of this unit
         guest_existed, guests = mongodb_utils.query_many("guests", {"unit": body['unit_id']})
-        print("-----Guest number: {}".format(len(guests)))
         if guest_existed:
             for guest in guests:
                 guest_token = guest['token']
