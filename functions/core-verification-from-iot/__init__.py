@@ -15,6 +15,7 @@ def main(events: List[func.EventHubEvent],
          writeRecordEventHub: func.Out[bytes],
          sendEmailEventHub: func.Out[bytes],
          notifyIotEventHub: func.Out[bytes],
+         garbageCollectionUnitEventHub: func.Out[bytes],
          msg: func.Out[func.QueueMessage]):
     for event in events:
         body = dict(pickle.loads(event.get_body()))
@@ -29,6 +30,7 @@ def main(events: List[func.EventHubEvent],
         msg.set(res_body['verify_identity'])
 
         writeRecordEventHub.set(pickle.dumps(res_body))
+        garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
         # notifyIotEventHub.set(pickle.dumps(res_body))
         # if not res_body['verified']:
         #     sendEmailEventHub.set(pickle.dumps(res_body))
