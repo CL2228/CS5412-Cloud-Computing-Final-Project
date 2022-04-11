@@ -31,5 +31,15 @@ if __name__ == "__main__":
     event_body = {'device_id': "gates-hall-g01",
                   'blob_name': "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
                   'unit_id': "62475aaadd78bdc4e2448eb8"}
+
+    res_event_body = {'timestamp': 1649651613.762,
+                      'unit_id': '62475aaadd78bdc4e2448eb8',
+                      'device_id': 'gates-hall-g01',
+                      'blob_name': 'gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg',
+                      'verified': False,
+                      'verify_identity': 'Stranger',
+                      'reference_img': None,
+                      'confidence': 0.0}
     res = asyncio.run(send_event("verification-request-event", event_body))
+    # res = asyncio.run(send_event("write-records-event", res_event_body))
     print(res)
