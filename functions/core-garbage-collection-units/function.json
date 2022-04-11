@@ -1,0 +1,22 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "events",
+      "direction": "in",
+      "eventHubName": "garbage-collection-units",
+      "connection": "cs5412finalprojecteventhub_CoreGarbageCollectionUnit_EVENTHUB",
+      "cardinality": "many",
+      "consumerGroup": "$Default",
+      "dataType": "binary"
+    },
+    {
+      "type": "queue",
+      "direction": "out",
+      "name": "outputQueueItem",
+      "queueName": "core-garbage-collection-units",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}
