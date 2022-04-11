@@ -14,12 +14,11 @@
     [record]:       records
     [devices]:      devices
 """
-
+import pymongo
 from pymongo import MongoClient
 from bson import ObjectId
 from ..config import cosmosDBString, localMongoString, mongoDatabaseName
 # from functions.server_functions.config import cosmosDBString, localMongoString, mongoDatabaseName
-
 mongo_client = MongoClient(cosmosDBString)
 
 
@@ -120,16 +119,23 @@ def query_one(collection_name: str,
 
 def query_many(collection_name: str,
                query_dict: dict,
+               sort_dict: dict = None,
+               limit_num: int = 65536,
                database_name: str = mongoDatabaseName):
     try:
         database = mongo_client[database_name]
         collection = database[collection_name]
         if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
             query_dict['_id'] = ObjectId(query_dict['_id'])
-        query_result = list(collection.find(query_dict))
+        # if sort_dict is not None:
+        #     print("here")
+        #     query_result = list(collection.find(query_dict).sort(sort_dict).limit(limit_num))
+        # else:
+        #     query_result = list(collection.find(query_dict).limit(limit_num))
+        query_result = list(collection.find(query_dict).sort("timestamp"))
         return len(query_result) > 0, query_result
     except Exception as ex:
-        return False
+        return False, ex
 
 
 ############################################################################
@@ -199,4 +205,5 @@ if __name__ == "__main__":
                       'verify_identity': 'Stranger',
                       'reference_img': None,
                       'confidence': 0.0}
-    print(insert("records", data))
+    # print(insert("records", data))
+    print(query_many("records", {}, sort_dict={'timestamp': 1}))
