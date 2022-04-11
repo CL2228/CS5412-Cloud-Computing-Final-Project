@@ -14,7 +14,8 @@ def main(events: List[func.EventHubEvent],
         logging.info('Python EventHub trigger processed an event: %s',
                      event_body)
         res = handle_one_event(event)
-        outputQueueItem.set("Handle one core-write-record event at {}, result:{}".format(datetime.datetime.now(), res))
+        outputQueueItem.set("Handle one core-write-record event at {}, result:{}".format(datetime.datetime.now(),
+                                                                                         event_body['verified']))
 
 
 def handle_one_event(event: func.EventHubEvent):
