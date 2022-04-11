@@ -31,13 +31,13 @@
 
 
     [Record Schema]
-        "unit": str             the Object ID of the unit that this record belongs to
-        "face_id": str          the face ID of this record
+        "timestamp": double    the time stamp of the record
+        "unit_id": str          the Object ID of the unit that this record belongs to
         "face_img": str         the blob name of query image
+        "device_id": str        the device ID of the IoT device
         "ref_img": str          the blob name of support image (if exists)
         "verified": bool        valid verification or not
-        "identity_type": str    the type of the person, can be: "tenant", "guest", "unknown"
-
+        "verify_identity": str  the identification of that record (could be tenant's name, "Guest" or "Stranger"
 """
 
 
@@ -48,7 +48,6 @@ def tenant_schema_check(data: dict):
     assert "password" in data.keys() and type(data['password']) == str
     assert "face_img" in data.keys() and type(data['face_img']) == str or data['face_img'] is None
     assert "units" in data.keys() and type(data['units']) == dict
-    return True
 
 
 def guest_schema_check(data: dict):
@@ -58,7 +57,6 @@ def guest_schema_check(data: dict):
     # assert "face_id" in data.keys() and type(data['face_id']) == str
     # assert "face_img" in data.keys() and type(data['face_img']) == str
     assert "unit" in data.keys() and type(data['unit']) == str
-    return True
 
 
 def unit_schema_check(data: dict):
@@ -66,16 +64,16 @@ def unit_schema_check(data: dict):
     assert "address" in data.keys() and type(data['address']) == str
     assert "unit_number" in data.keys() and type(data['unit_number']) == str
     assert "tenants" in data.keys() and type(data['tenants']) == dict
-    return True
 
 
 def record_schema_check(data: dict):
-    assert "unit" in data.keys() and type(data['unit']) == str
-    assert "face_id" in data.keys() and type(data['face_id']) == str
+    assert "timestamp" in data.keys()
+    assert "unit_id" in data.keys() and type(data['unit_id']) == str
     assert "face_img" in data.keys() and type(data['face_img']) == str
+    assert "device_id" in data.keys() and type(data['device_id']) == str
+    assert "ref_img" in data.keys() and data['ref_img'] is None or type(data['ref_img']) == str
     assert "verified" in data.keys() and type(data['verified']) == bool
-    assert "identity_type" in data.keys() and type(data['identity_type']) in ["tenant", "guest", "unknown"]
-    return True
+    assert "verify_identity" in data.keys() and type(data['verify_identity']) == str
 
 
 CHECK_FUNCTIONS = {

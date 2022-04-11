@@ -191,7 +191,12 @@ def delete_many(collection_name: str,
 
 
 if __name__ == "__main__":
-    # query = {'_id': ObjectId("62470e90a14653d66596a203")}
-    # print(query_one("tenants", query))
-    # print(delete_one("units", {"unit_number": "G01"}))
-    print(query_many("guests", {}))
+    data = {'timestamp': 1649651613.762,
+                      'unit_id': '62475aaadd78bdc4e2448eb8',
+                      'device_id': 'gates-hall-g01',
+                      'blob_name': 'gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg',
+                      'verified': False,
+                      'verify_identity': 'Stranger',
+                      'reference_img': None,
+                      'confidence': 0.0}
+    print(insert("records", data))
