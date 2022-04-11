@@ -38,6 +38,13 @@
       "name": "notifyIotEventHub",
       "connection": "cs5412finalprojecteventhub_CoreNotifyIotDevice_EVENTHUB",
       "eventHubName": "notify-iot-device-event"
+    },
+    {
+      "type": "eventHub",
+      "direction": "out",
+      "name": "garbageCollectionUnitEventHub",
+      "connection": "cs5412finalprojecteventhub_CoreGarbageCollectionUnit_EVENTHUB",
+      "eventHubName": "garbage-collection-units"
     }
   ]
 }
