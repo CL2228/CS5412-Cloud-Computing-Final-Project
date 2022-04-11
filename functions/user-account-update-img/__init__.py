@@ -48,7 +48,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         jwt_status, jwt_payload = jwt_utils.verify_jwt(token)
         if not jwt_status:
             res_body['message'] = "Invalid token, you need to log in again"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
 
         # get account info from cosmosDB
         account_status, account = mongodb_utils.query_one("tenants", {'email': jwt_payload['email']})
