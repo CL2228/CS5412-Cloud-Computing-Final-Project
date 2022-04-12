@@ -119,20 +119,46 @@ def query_one(collection_name: str,
 
 def query_many(collection_name: str,
                query_dict: dict,
-               sort_dict: dict = None,
+               sort_key=None,
                limit_num: int = 65536,
                database_name: str = mongoDatabaseName):
+    """
+        query_many function for mongoDB, this function can be used to query many pieces of data and limit the number,
+        and sort the data by a key
+
+        noted that currently in CosmosDB, if you want to sort the queried data by a key that other than "_id",
+        you need to add indexing to this key, according to the documentation:
+        https://docs.microsoft.com/en-us/azure/cosmos-db/mongodb/mongodb-indexing#indexing-for-mongodb-server-version-36
+
+    :param collection_name: the name of the collection in mongoDB
+    :param query_dict: query conditions
+    :param sort_key: the key that used for sorting, if not provided, the queried data are not sorted by default
+                    this parameter must be a str or a tuple
+                    - str: specifies the key for soring
+                    - tuple: must be in the format as (key, 1/-1)
+                        1 for ascending order, -1 for descending order
+    :param limit_num: limit the number of data that are returned, maximum as 65536
+    :param database_name: the name of database, in this project, "cs5412-cl2228" is the default value
+    :return: [T / F, data / message]
+    """
+    limit_num = min(65536, limit_num)
     try:
         database = mongo_client[database_name]
         collection = database[collection_name]
         if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
             query_dict['_id'] = ObjectId(query_dict['_id'])
-        # if sort_dict is not None:
-        #     print("here")
-        #     query_result = list(collection.find(query_dict).sort(sort_dict).limit(limit_num))
-        # else:
-        #     query_result = list(collection.find(query_dict).limit(limit_num))
-        query_result = list(collection.find(query_dict).sort("timestamp"))
+        if sort_key is not None:
+            if type(sort_key) == str:
+                query_result = list(collection.find(query_dict).sort(sort_key).limit(limit_num))
+            elif type(sort_key) == tuple:
+                assert len(sort_key) == 2 and type(sort_key[0]) == str and (sort_key[1] == -1 or sort_key[1] == 1),\
+                    "wrong tuple format, the vliad format should be (key, 1/-1)"
+                query_result = list(collection.find(query_dict).sort(sort_key[0], sort_key[1]).limit(limit_num))
+            else:
+                raise ValueError("The 'sort_keys' parameter should be a string or a tuple")
+        else:
+            query_result = list(collection.find(query_dict).limit(limit_num))
+        # query_result = list(collection.find(query_dict))
         return len(query_result) > 0, query_result
     except Exception as ex:
         return False, ex
