@@ -96,9 +96,11 @@ def insert_with_dup_check(collection_name: str,
 ############################################################################
 def query_one(collection_name: str,
               query_dict: dict,
+              projections: dict = None,
               database_name: str = mongoDatabaseName):
     """
     query a piece of data from database
+    :param projections:
     :param collection_name:
     :param query_dict:
     :param database_name:
@@ -109,7 +111,7 @@ def query_one(collection_name: str,
         collection = database[collection_name]
         if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
             query_dict['_id'] = ObjectId(query_dict['_id'])
-        query_result = collection.find_one(query_dict)
+        query_result = collection.find_one(query_dict, projections)
         if query_result is None:
             return False, "Data Not Found"
         return True, query_result
@@ -119,6 +121,7 @@ def query_one(collection_name: str,
 
 def query_many(collection_name: str,
                query_dict: dict,
+               projections: dict = None,
                sort_key=None,
                limit_num: int = 65536,
                database_name: str = mongoDatabaseName):
@@ -132,6 +135,7 @@ def query_many(collection_name: str,
 
     :param collection_name: the name of the collection in mongoDB
     :param query_dict: query conditions
+    :param projections:
     :param sort_key: the key that used for sorting, if not provided, the queried data are not sorted by default
                     this parameter must be a str or a tuple
                     - str: specifies the key for soring
@@ -149,15 +153,15 @@ def query_many(collection_name: str,
             query_dict['_id'] = ObjectId(query_dict['_id'])
         if sort_key is not None:
             if type(sort_key) == str:
-                query_result = list(collection.find(query_dict).sort(sort_key).limit(limit_num))
+                query_result = list(collection.find(query_dict, projections).sort(sort_key).limit(limit_num))
             elif type(sort_key) == tuple:
                 assert len(sort_key) == 2 and type(sort_key[0]) == str and (sort_key[1] == -1 or sort_key[1] == 1),\
                     "wrong tuple format, the vliad format should be (key, 1/-1)"
-                query_result = list(collection.find(query_dict).sort(sort_key[0], sort_key[1]).limit(limit_num))
+                query_result = list(collection.find(query_dict, projections).sort(sort_key[0], sort_key[1]).limit(limit_num))
             else:
                 raise ValueError("The 'sort_keys' parameter should be a string or a tuple")
         else:
-            query_result = list(collection.find(query_dict).limit(limit_num))
+            query_result = list(collection.find(query_dict, projections).limit(limit_num))
         # query_result = list(collection.find(query_dict))
         return len(query_result) > 0, query_result
     except Exception as ex:

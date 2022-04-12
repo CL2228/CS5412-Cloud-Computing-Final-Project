@@ -39,18 +39,18 @@ def query_many(collection_name: str,
         collection = database[collection_name]
         if "_id" in query_dict.keys() and type(query_dict['_id']) == str:
             query_dict['_id'] = ObjectId(query_dict['_id'])
-        if sort_key is not None:
-            if type(sort_key) == str:
-                query_result = list(collection.find(query_dict).sort(sort_key).limit(limit_num))
-            elif type(sort_key) == tuple:
-                assert len(sort_key) == 2 and type(sort_key[0]) == str and (sort_key[1] == -1 or sort_key[1] == 1),\
-                    "wrong tuple format, the vliad format should be (key, 1/-1)"
-                query_result = list(collection.find(query_dict).sort(sort_key[0], sort_key[1]).limit(limit_num))
-            else:
-                raise ValueError("The 'sort_keys' parameter should be a string or a tuple")
-        else:
-            query_result = list(collection.find(query_dict).limit(limit_num))
-        # query_result = list(collection.find(query_dict))
+        # if sort_key is not None:
+        #     if type(sort_key) == str:
+        #         query_result = list(collection.find(query_dict).sort(sort_key).limit(limit_num))
+        #     elif type(sort_key) == tuple:
+        #         assert len(sort_key) == 2 and type(sort_key[0]) == str and (sort_key[1] == -1 or sort_key[1] == 1),\
+        #             "wrong tuple format, the vliad format should be (key, 1/-1)"
+        #         query_result = list(collection.find(query_dict).sort(sort_key[0], sort_key[1]).limit(limit_num))
+        #     else:
+        #         raise ValueError("The 'sort_keys' parameter should be a string or a tuple")
+        # else:
+        #     query_result = list(collection.find(query_dict).limit(limit_num))
+        query_result = list(collection.find(query_dict, None))
         return len(query_result) > 0, query_result
     except Exception as ex:
         return False, ex
