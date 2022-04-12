@@ -9,15 +9,19 @@ def send(subject: str,
          content,
          content_type: str = 'plain',
          debug: bool = True):
-    msg = MIMEText(content, content_type)
-    msg['Subject'] = subject
-    msg['From'] = EMAIL_FROM
-    msg['To'] = to
+    try:
+        msg = MIMEText(content, content_type)
+        msg['Subject'] = subject
+        msg['From'] = EMAIL_FROM
+        msg['To'] = to
 
-    mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    mail.set_debuglevel(debug)
-    mail.starttls()
-    mail.login(SMTP_USERNAME, SMTP_PASSWORD)
-    mail.sendmail(EMAIL_FROM, to, msg.as_string())
-    mail.quit()
+        mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        mail.set_debuglevel(debug)
+        mail.starttls()
+        mail.login(SMTP_USERNAME, SMTP_PASSWORD)
+        mail.sendmail(EMAIL_FROM, to, msg.as_string())
+        mail.quit()
+        return True
+    except Exception:
+        return False
 

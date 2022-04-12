@@ -1,6 +1,7 @@
 EMAIL_SUBJECTS = {
     "register_token": "[CS5412-CL2228] Account Register Token",
-    "retrieve_token": "[CS5412-CL2228] Account Retrieve Token"
+    "retrieve_token": "[CS5412-CL2228] Account Retrieve Token",
+    "warning_record": "[CS5412-CL2228] Suspicious Entrance Record of Your Apartment"
 }
 
 
@@ -27,8 +28,28 @@ Please copy and paste the whole token:
 Thanks,
 CL
 """,
+    "warning_record":
+        """Dear user {},
+
+There is a suspicious record in your unit {} , {} at {}. Please Login to the system to check the entrance record.
+
+Thanks,
+CL 
+""",
 
 }
 
 
 ALLOW_TYPES = {"register_token", "retrieve_token"}
+
+
+if __name__ == "__main__":
+    unit_data = {
+        "unit_name": "Apt 6",
+        "building_name": "612 E Buffalo St"
+    }
+
+    msg = EMAIL_BODIES['warning_record'].format("cl2228@cornell.edu",
+                                                unit_data['unit_name'],
+                                                unit_data['building_name'],
+                                                123)

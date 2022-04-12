@@ -1,12 +1,27 @@
+import datetime
+
 from ..email import email_utils
 from .email_config import EMAIL_SUBJECTS, EMAIL_BODIES, ALLOW_TYPES
+from ..mongodb.mongodb_schema_check import CHECK_FUNCTIONS
 
 
 def send_token(msg_type: str, token: str, email_to: str):
-
     assert msg_type in ALLOW_TYPES
     msg = EMAIL_BODIES[msg_type].format(email_to, token)
     email_utils.send(subject=EMAIL_SUBJECTS[msg_type], to=email_to, content=msg)
+
+
+def send_warning_email(email_to: str,
+                       unit_data: dict,
+                       timestamp):
+    print("sending warning..., to:{}".format(email_to))
+    msg = EMAIL_BODIES['warning_record'].format(email_to,
+                                                unit_data['unit_number'],
+                                                unit_data['building_name'],
+                                                datetime.datetime.fromtimestamp(timestamp))
+    print("email body:{}".format(msg))
+    email_utils.send(subject=EMAIL_SUBJECTS['warning_record'], to=email_to, content=msg)
+
 
 
 if __name__ == "__main__":
