@@ -14,14 +14,11 @@ def send_token(msg_type: str, token: str, email_to: str):
 def send_warning_email(email_to: str,
                        unit_data: dict,
                        timestamp):
-    print("sending warning..., to:{}".format(email_to))
     msg = EMAIL_BODIES['warning_record'].format(email_to,
                                                 unit_data['unit_number'],
                                                 unit_data['building_name'],
                                                 datetime.datetime.fromtimestamp(timestamp))
-    print("email body:{}".format(msg))
     email_utils.send(subject=EMAIL_SUBJECTS['warning_record'], to=email_to, content=msg)
-
 
 
 if __name__ == "__main__":
