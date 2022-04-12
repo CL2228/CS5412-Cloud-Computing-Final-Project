@@ -3,11 +3,9 @@ import logging
 import azure.functions as func
 import pickle
 from ..server_functions.face import azure_face_helpers
-from ..server_functions.config import imgBaseUrl
 from ..server_functions.mongodb import mongodb_utils
 from ..server_functions.jwt import jwt_utils
 from ..server_functions.blob import azure_blob_helpers
-# from ..server_functions.eventhub import eventhub_utils
 from io import BytesIO
 
 
@@ -19,8 +17,7 @@ def main(events: List[func.EventHubEvent],
          msg: func.Out[func.QueueMessage]):
     for event in events:
         body = dict(pickle.loads(event.get_body()))
-        logging.info("---------------------------------------")
-        logging.info('Python EventHub trigger processed an event: %s',
+        logging.info('[Event triggered]Core-verification-from-iot processed an event: %s',
                      body)
         res_body = handle_one_event(event)
 
@@ -32,11 +29,10 @@ def main(events: List[func.EventHubEvent],
         writeRecordEventHub.set(pickle.dumps(res_body))
         garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
         # notifyIotEventHub.set(pickle.dumps(res_body))
-        # if not res_body['verified']:
-        #     sendEmailEventHub.set(pickle.dumps(res_body))
-
-        logging.info("RESULT---------------------------------------")
-        logging.info(res_body)
+        if not res_body['verified']:
+            sendEmailEventHub.set(pickle.dumps(res_body))
+        # logging.info("RESULT---------------------------------------")
+        # logging.info(res_body)
 
 
 def handle_one_event(event: func.EventHubEvent):
