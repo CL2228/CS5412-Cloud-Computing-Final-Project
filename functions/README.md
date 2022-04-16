@@ -5,11 +5,15 @@
 > There is **no need** for you to configure this module to run on your local computer or on Azure. All serverless functions are **already running** on Azure. The aim of this page is to provide instructions on how to use APIs I implemented.
 
 ## **API Catalog**
-- ### [**Register an account**](#register-account)
-- ### 
-
-
+- ### [**User Register an account**](#register-account)
+- ### [**User login**](#log-in)
+- ### [**User Change Password**](#change-password)
+- ### [**User Change Verification Photo**](#change-verification-image)
+- ### [**User Add Unit**](#add-unit)
+- ### [**User Add Guests**](#add-guest)
 # **API Manual**
+
+****
 
 # Register Account
 ## Overall
@@ -17,4 +21,183 @@
     1. The first step is to request the server to send an email token. 
     2. The second step is to provide this received token to verify your email and finish the registration process.
 ## Request
-- ### **URL**: `https://cs5412-final-project.azurewebsites.net/api/user-account-create`
+- ### **URL**: 
+    `POST` `https://cs5412-final-project.azurewebsites.net/api/user-account-create`
+- ### **Headers**:
+    - `Content-Type`: `"application/json"`
+- ### **Body**: A JSON body should be provided
+    - `req-type`: the type of the request. In this API there are two types: `"send_token"` and `"verify"`. Each represents the step of the process.
+    - `email`: the email of the new account.
+    - `password`: the password of this new account. **Only required in the `verify` request type**.
+    - `first-name`: the first name of this new account. **Only required in the `verify` request type**.
+    - `last-name`: the last name of this new account. **Only required in the `verify` request type**.
+    - `token`: the token that was sent to the email. **Only required in the `verify` request type**.
+- ### **Sample request body**:
+    ```json
+    {
+        "req-type": "send_token",
+        "email": "example@example.com"
+    }
+    ```
+    ```json
+    {
+        "req-type": "verify",
+        "email": "example@example.com",
+        "password": "12345678",
+        "first-name": "Chenghui",
+        "last-name": "Li",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJlbWF"
+    }
+    ```
+## Response:
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+- ### Request failures:
+    - `400`: Usually result from wrong request format.
+    - `401`: Wrong or invalid token provided.
+    - `403`: Account already existed.
+    - `500`: Internal errors, might be because lost connection to database.
+
+****
+
+# Log in
+## Overall
+- This function is used for user longin. After log in successfully, a JWT will be returned. This token needs to be stored in frontend as it is necessary for all user operations.
+## Request:
+- ### **URL**:
+    `POST` `https://cs5412-final-project.azurewebsites.net/api/user-account-login`
+- ### **Headers**: 
+    - `Content-Type`: `"application/json"`
+- ### **Body**: A JSON body should be provided
+    - `email`: the email of the account.
+    - `password`: password.
+## Response:
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+    - `access-token`: the token for authentication, should be kept in the browser locally.
+    - `data`: the information of the account
+        - `email`: email
+        - `first_name`: first name
+        - `last_name`: last name
+        - `face_img`: the blob name of this user's verification image
+        - `units`: this user's unit information
+- ### Request failures:
+    - `400`: Wrong request format
+    - `401`: Wrong password
+    - `404`: User not found
+    - `500`: Internal errors
+- ### **Sample response body**:
+    ```json
+    {
+        "access-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+        "data": {
+            "email": "cl2228@cornell.edu",
+            "first_name": "Chenghui",
+            "last_name": "Li",
+            "face_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+            "units": {
+                "62475aaadd78bdc4e2448eb8": {
+                    "building_name": "GatesHall",
+                    "unit_number": "G01"
+                }
+            }
+        }
+    }
+    ```
+
+****
+
+# Change Password:
+## Overall
+- This function is used for resetting the password of an account. Similar to register an account, there are two steps:
+    1. The first step is to send a token to the email for verification.
+    2. The second step is to verify the token and reset the password
+## Request
+- ### **URL**:
+    `POST` `https://cs5412-final-project.azurewebsites.net/api/user-account-update-pswd`
+- ### **Headers**:
+    - `Content-Type`: `"application/json"`
+- ### **Body**: A JSON body should be provided
+    - `req-type`: the type of the request. In this API there are two types: `"send_token"` and `"verify"`. Each represents the step of the process.
+    - `email`: the email of the new account.
+    - `new-password`: the new password of this new account. **Only required in the `verify` request type**.
+    - `token`: the token that was sent to the email. **Only required in the `verify` request type**.
+- ### **Sample request body**:
+    ```json
+    {
+        "req-type": "send_token",
+        "email": "example@example.com"
+    }
+    ```
+    ```json
+    {
+        "req-type": "verify",
+        "email": "example@example.com",
+        "new-password": "12345678",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJlbWF"
+    }
+    ```
+## Response
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+- ### Request failures:
+    - `400`: Usually result from wrong request format.
+    - `401`: Wrong or invalid token provided.
+    - `404`: Account not found.
+    - `500`: Internal errors. Might be concurrent write for the same account to the database.
+
+****
+
+# Change verification image
+## Overall
+- This function is used for changing the verification photo of tenants. When first creating a new account, **there is no verification image by defult**. The user needs to change his/her photo so that they can be approved when entering his/her apartment. The frontend should call this API for this purpose.
+## Request
+- ### **URL**:
+    `POST`: `https://cs5412-final-project.azurewebsites.net/api/user-account-update-img`
+- ### **Headers**
+    - `Content-Type`: `"multipart/from-data"`
+    - `x-access-token`: the token received from the login process.
+- ### **Body**: A Multi-part Form body should be provided
+    - `img`: the verification image of the tenant. Support type: jpg/jpeg/png. This image must contain the tenant's face.
+## Response
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+- ### Request failures:
+    - `400`: Usually result from wrong request format. This might be missing token, missing form fileds, unsupported image file format, the size of the image is too big, or a multipart/form body is not used.
+    - `401`: Wrong or invalid token provided.
+    - `403`: There is no face in the uploaded image.
+    - `404`: Account does not exist.
+    - `500`: Internal failures. Might be because failed Blob Storage connection, or concurrent write to database, etc.
+
+****
+
+# Add Unit
+## Overall
+- A user can have more than one unit (for example, he/she is rich). When first register a new account, this account doesn't have any unit, so the user needs to add his/her apartments to his account. Before adding a unit, the user needs to obtain a UnitID from the building leasing office.
+## Request
+- ### **URL**:
+    `POST`: `https://cs5412-final-project.azurewebsites.net/api/user-add-unit`
+- ### **Headers**
+    - `Content-Type`: `"application/json`
+    - `x-access-token`: the token received from the login process.
+- ### **Body**: A JSON body should be provided
+    - `unit-id`: the ID of the unit.
+## Response
+- ### A JSON is returned
+- `message`: A message that indicates the status of this query, no matter succeed or not.
+- ### Request failures:
+    - `400`: Usually result from wrong request format. 
+    - `401`: The access token is not valid.
+    - `403`: This account has already added this unit.
+    - `404`: Unit or tenant account not found.
+    - `500`: Internal errors. Might be because concurrent write to the same unit/tenant account.
+
+****
+
+# Add Guest
+## Overall
+- A tenant can add temporary guests to his/her apartments. When adding guests, the tenant needs to specify the first name and last name of the guest, as well as the unit ID, and a photo that contains the face of that guest.
