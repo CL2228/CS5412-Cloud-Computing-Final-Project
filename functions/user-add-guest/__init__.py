@@ -41,7 +41,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         jwt_status, jwt_payload = jwt_utils.verify_jwt(token)
         if not jwt_status:
             res_body['message'] = "Token invalid. Please login"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
 
         # check if there is information missing
         img = req.files['img']
@@ -52,6 +52,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             res_body['message'] = "Information missing"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
         img_bytes = img.read()
+
+        # no file is uploaded
+        if len(img_bytes) == 0:
+            res_body['message'] = "No file is uploaded"
+            return func.HttpResponse(json.dumps(res_body), status_code=400, headers=res_headers)
 
         # check uploaded file is with right format
         check_status, suffix = azure_blob_helpers.check_img_file_suffix(img.filename)
@@ -74,14 +79,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # this tenant doesn't belong to the unit
         if unit_id not in tenant_data['units'].keys() or tenant_data['email'] not in unit_data['tenants'].keys():
             res_body['message'] = "You have no right to ad guests to this unit"
-            return func.HttpResponse(json.dumps(res_body), status_code=403, headers=res_headers)
+            return func.HttpResponse(json.dumps(res_body), status_code=401, headers=res_headers)
 
         # now passed the authorization
         # detect face and get face ID
         face_detect_status, face_id = azure_face_helpers.get_faceId_with_stream(BytesIO(img_bytes))
         if not face_detect_status:
             res_body['message'] = face_id
-            return func.HttpResponse(json.dumps(res_body), status_code=400, headers=res_headers)
+            return func.HttpResponse(json.dumps(res_body), status_code=403, headers=res_headers)
 
         # upload the image to Blob
         img_name = azure_blob_helpers.generate_file_name(suffix="." + suffix, prefix="guests/" + str(unit_data['_id']) + "/")
@@ -116,8 +121,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except KeyError as ex:
         res_body['message'] = "Missing keys. Please check the validity of requests"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-    except Exception:
-        res_body['message'] = "Internal errors"
+    except Exception as ex:
+        res_body['message'] = str(ex)
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
 
 

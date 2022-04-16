@@ -10,13 +10,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     res_headers = {'Content-Type': 'application/json'}
     res_body = {}
     try:
-        res_body = req.get_json()
+        req_body = req.get_json()
         token = req.headers.get('x-access-token')
         if token is None:
-            res_body[
-                'message'] = "Missing token: a JWT needs to be included in the HTTP request headers with key <x-access-token>"
+            res_body['message'] = "Missing token: a JWT needs to be included in the HTTP request headers with key <x-access-token>"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-        unit_id = res_body['unit-id']
+        unit_id = req_body['unit-id']
 
         # check validity of the JWT
         jwt_valid, jwt_payload = jwt_utils.verify_jwt(token)
@@ -57,5 +56,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         res_body['message'] = str(ex)
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
     except Exception as ex:
-        res_body['message'] = "Internal Errors"
+        res_body['message'] = "Internal Errors: {}".format(str(ex))
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
