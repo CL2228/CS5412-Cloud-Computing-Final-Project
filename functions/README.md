@@ -1,5 +1,5 @@
-# **Azure HTTP function Module**
-> This module is the core of this CS5412 final project. It contains **HTTP** serverless functions that suppor the central functionality of the project. Note that **only functions that receive HTTP requests** are included in this page because they are called by the frontend. Other functions that triggered by other Azure modules such as ***IoT Hub, Azure Event Hub*** are not opened to public frontends.
+# **Azure Function HTTP Module**
+> This module is the core of this CS5412 final project. It contains **HTTP** serverless functions that suppor the central functionality of the project. Note that **only functions that receive HTTP requests** are included in this page because they are called by the frontend (why you need these instructions). Those functions that triggered by other Azure modules such as ***IoT Hub, Azure Event Hub*** are not opened to public frontends.
 
 ## **Run this module**
 > There is **no need** for you to configure this module to run on your local computer or on Azure. All serverless functions are **already running** on Azure. The aim of this page is to provide instructions on how to use APIs I implemented.
@@ -11,6 +11,8 @@
 - ### [**User Change Verification Photo**](#change-verification-image)
 - ### [**User Add Unit**](#add-unit)
 - ### [**User Add Guests**](#add-guest)
+- ### [**User Get Records**](#get-records)
+- ### [**Get image from the system**](#get-image)
 # **API Manual**
 
 ****
@@ -84,10 +86,10 @@
         - `face_img`: the blob name of this user's verification image
         - `units`: this user's unit information
 - ### Request failures:
-    - `400`: Wrong request format
-    - `401`: Wrong password
-    - `404`: User not found
-    - `500`: Internal errors
+    - `400`: Wrong request format.
+    - `401`: Wrong password.
+    - `404`: User not found.
+    - `500`: Internal errors.
 - ### **Sample response body**:
     ```json
     {
@@ -201,3 +203,100 @@
 # Add Guest
 ## Overall
 - A tenant can add temporary guests to his/her apartments. When adding guests, the tenant needs to specify the first name and last name of the guest, as well as the unit ID, and a photo that contains the face of that guest.
+## Request
+- ### **URL**
+    `POST` `https://cs5412-final-project.azurewebsites.net/api/user-add-guest`
+- ### **Headers**
+    - `Content-Type`: `"multipart/from-data"`
+    - `x-access-token`: the token received from the login process.
+- ### **Body**: A Multi-part Form body should be provided
+    - `img`: the verification image of the guest. Support type: jpg/jpeg/png. This image must contain the guest's face.
+    - `first-name`: the first name of the guest.
+    - `last-name`: the last name of the guest.
+    - `unit-id`: the unit ID of the aprtment that the guest is going to visit.
+## Response
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+- ### Request failures:
+    - `400`: Usually result from wrong request format. This might be missing token, missing form fileds, unsupported image file format, the size of the image is too big, or a multipart/form body is not used.
+    - `401`: The token is not valid. Or this tenant has no right to the unit.
+    - `403`: No face is detected or the size of image is too big.
+    - `404`: No tenant account found or the unitID is not valid.
+    - `500`: Internal errors. 
+
+****
+
+# Get Records
+## Overall
+- A tenant can retrieve and inspect entrance records of his/her apartments. To use this API to fetch records, the tenant needs to provide right access token (received when login) and the correct unit ID.
+## Request
+- ### **URL**
+    `GET` `https://cs5412-final-project.azurewebsites.net/api/user-get-records`
+- ### **Headers**
+    - `Content-Type`: `"application/json"`
+    - `x-access-token`: the token received from the login process.
+- ### **Body**: A JSON body should be provided
+    - `unit-id`: the ID of the unit.
+## Response
+- ### A JSON is returned
+- ### JSON fields:
+    - `message`: A message that indicates the status of this query, no matter succeed or not.
+    - `data`: A list that contains records. Records are sorted by the timestamps, from newest to oldest. The format of each piece of data:
+        - `timestamp`: the timestamp of this entrance record (UTC timezone, London).
+        - `face_img`: the blob name of the image of this entrance record. The image is taken when the vistor initiated a entrance request at the IoT edge.
+        - `verified`: This entrance record is verified or not.
+        - `verify_identity`: The name of matched tenant/guest of this entrance record. If no matched person found, this field will be `Stranger`.
+        - `ref_img`: the blob name of the reference image of this visitor. Reference image only exists when the system finds a matched person in the system (this person can be a tenant or a guest). When no matched person found (the visitor is a stranger), this field will be `null`.
+- ### Request failures:
+    - `400`: Wrong request format.
+    - `401`: Wrong JWT token or the tenant doesn't have authorization to check the entrance records of this unit.
+    - `404`: No unitId is found, or there is no such tenant user in the system.
+    - `500`: Internal errors.
+- ### **Sample reponse**
+    ```json
+    {
+        "data": [
+            {
+                "timestamp": 1649818577.37,
+                "face_img": "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
+                "ref_img": null,
+                "verified": false,
+                "verify_identity": "Stranger"
+            },
+            {
+                "timestamp": 1649818533.152,
+                "face_img": "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
+                "ref_img": null,
+                "verified": false,
+                "verify_identity": "Stranger"
+            },
+            {
+                "timestamp": 1649817814.377,
+                "face_img": "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
+                "ref_img": null,
+                "verified": false,
+                "verify_identity": "Stranger"
+            }
+        ],
+        "message": "Success"
+    }
+    ```
+
+****
+
+# Get Image
+## Overall
+- This is a image-based system, which verifiees the validity of entrance request by visitor's images taken by IoT edge devices. This API is provided for querying images from the system.
+## Request
+- ### **URL**
+    `GET` `https://cs5412-final-project.azurewebsites.net/api/img-get`
+- ### **Params**
+    - `name`: the blob name of the image.
+- ### **Sample request URL**
+    `GET` `https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg`
+## Response
+- ### If data found, a byte vector contains image data is returned. If not, a JSON is returned and the field `message` contians the error message.
+- ### Request failures:
+    - `400`: Wrong request format, mainly because missing `name` filed in params.
+    - `404`: No data found. You need to check the blob name.
