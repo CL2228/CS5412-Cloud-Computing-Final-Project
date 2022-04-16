@@ -12,6 +12,7 @@
 
 """
 
+import logging
 import azure.functions as func
 import json
 from io import BytesIO
@@ -32,11 +33,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         token = req.headers.get('x-access-token')
         if token is None:
             res_body['message'] = "Token invalid. You need to login before this operation"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
         if img is None:
             res_body['message'] = "You must provide an image"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
         img_bytes = img.read()
+
+        # an empty file
+        if len(img_bytes) == 0:
+            res_body['message'] = "No file provided"
+            return func.HttpResponse(json.dumps(res_body), status_code=400, headers=res_headers)
 
         # check uploaded file is with right format
         check_status, suffix = azure_blob_helpers.check_img_file_suffix(img.filename)
@@ -54,14 +60,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         account_status, account = mongodb_utils.query_one("tenants", {'email': jwt_payload['email']})
         if not account_status:
             res_body['message'] = "Account not found, please log in again to verify"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=404)
+        
         # detect face and get faceID
         face_detect_status, face_id = azure_face_helpers.get_faceId_with_stream(BytesIO(img_bytes))
         # if not face detected
         if not face_detect_status:
             res_body['message'] = face_id
-            return func.HttpResponse(json.dumps(res_body), status_code=400, headers=res_headers)
+            return func.HttpResponse(json.dumps(res_body), status_code=403, headers=res_headers)
 
         # upload the image to Blob
         old_img_blob = account['face_img']
@@ -88,8 +94,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except KeyError as ex:
         res_body['message'] = "Missing keys. Please check the validity of requests"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-    except Exception:
-        res_body['message'] = "Internal errors"
+    except Exception as ex:
+        res_body['message'] = str(ex)
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
 
 

@@ -45,7 +45,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # check if has been added before
         if unit_id in user_data['units'].keys() and str(user_data['email']) in unit_data['tenants'].keys():
             res_body['message'] = "Failed. You have already added this unit."
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=403)
 
         # update tenant
         user_units_dict = copy.deepcopy(user_data['units'])

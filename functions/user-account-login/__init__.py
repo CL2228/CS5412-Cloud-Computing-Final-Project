@@ -54,7 +54,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # wrong password
         if query_data['password'] != password:
             res_body['message'] = "Wrong password"
-            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
 
         # verification passed, generate a JWT
         token = generate_jwt({"email": email, "_id": str(query_data['_id'])}, expire_delta=jwtLoginExpireMinutes)
@@ -65,6 +65,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                    'face_img': query_data['face_img'],
                    'units': query_data['units']}
         res_body['data'] = account
+        res_body['message'] = "Success"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=200)
 
     except ValueError:
