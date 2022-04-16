@@ -6,7 +6,6 @@
         "password": str
         "first_name": str
         "last_name": str
-        "face_id": str          the face ID in Azure Face
         "face_img": str         the path of support image in Blob Storage
         "units"; dict           a list of unit ID that belong to this user
                 key - value : unitID - {
@@ -42,38 +41,36 @@
 
 
 def tenant_schema_check(data: dict):
-    assert "first_name" in data.keys() and type(data["first_name"]) == str
-    assert "last_name" in data.keys() and type(data['last_name']) == str
-    assert "email" in data.keys() and type(data['email']) == str
-    assert "password" in data.keys() and type(data['password']) == str
-    assert "face_img" in data.keys() and type(data['face_img']) == str or data['face_img'] is None
-    assert "units" in data.keys() and type(data['units']) == dict
+    assert "first_name" in data.keys() and type(data["first_name"]) == str, "Wrong first name info"
+    assert "last_name" in data.keys() and type(data['last_name']) == str, "Wrong lasts name info"
+    assert "email" in data.keys() and type(data['email']) == str, "Wrong email info"
+    assert "password" in data.keys() and type(data['password']) == str, "Wrong password info"
+    assert "face_img" in data.keys() and type(data['face_img']) == str or data['face_img'] is None, "Wrong face image info"
+    assert "units" in data.keys() and type(data['units']) == dict, "Wrong units info"
 
 
 def guest_schema_check(data: dict):
-    assert "first_name" in data.keys() and type(data["first_name"]) == str
-    assert "last_name" in data.keys() and type(data['last_name']) == str
-    assert "token" in data.keys() and type(data['token']) == str
-    # assert "face_id" in data.keys() and type(data['face_id']) == str
-    # assert "face_img" in data.keys() and type(data['face_img']) == str
-    assert "unit" in data.keys() and type(data['unit']) == str
+    assert "first_name" in data.keys() and type(data["first_name"]) == str, "Wrong first name info"
+    assert "last_name" in data.keys() and type(data['last_name']) == str, "Wrong last name info"
+    assert "token" in data.keys() and type(data['token']) == str, "Wrong token type"
+    assert "unit" in data.keys() and type(data['unit']) == str, "Wrong unit type"
 
 
 def unit_schema_check(data: dict):
-    assert "building_name" in data.keys() and type(data['building_name']) == str
-    assert "address" in data.keys() and type(data['address']) == str
-    assert "unit_number" in data.keys() and type(data['unit_number']) == str
-    assert "tenants" in data.keys() and type(data['tenants']) == dict
+    assert "building_name" in data.keys() and type(data['building_name']) == str, "Wrong building name info"
+    assert "address" in data.keys() and type(data['address']) == str, "Wrong address info"
+    assert "unit_number" in data.keys() and type(data['unit_number']) == str, "Wrong unit number info"
+    assert "tenants" in data.keys() and type(data['tenants']) == dict, "Wrong tenants info"
 
 
 def record_schema_check(data: dict):
-    assert "timestamp" in data.keys()
-    assert "unit_id" in data.keys() and type(data['unit_id']) == str
-    assert "face_img" in data.keys() and type(data['face_img']) == str
-    assert "device_id" in data.keys() and type(data['device_id']) == str
-    assert "ref_img" in data.keys() and data['ref_img'] is None or type(data['ref_img']) == str
-    assert "verified" in data.keys() and type(data['verified']) == bool
-    assert "verify_identity" in data.keys() and type(data['verify_identity']) == str
+    assert "timestamp" in data.keys(), "Wrong timestamp info"
+    assert "unit_id" in data.keys() and type(data['unit_id']) == str, "Wrong unit id info"
+    assert "face_img" in data.keys() and type(data['face_img']) == str, "Wrong face image info"
+    assert "device_id" in data.keys() and type(data['device_id']) == str, "Wrong device ID info"
+    assert "ref_img" in data.keys() and data['ref_img'] is None or type(data['ref_img']) == str, "Wrong reference image info"
+    assert "verified" in data.keys() and type(data['verified']) == bool, "Wrong verified info"
+    assert "verify_identity" in data.keys() and type(data['verify_identity']) == str, "Wrong verify identity info"
 
 
 CHECK_FUNCTIONS = {
