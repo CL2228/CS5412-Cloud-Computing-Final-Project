@@ -5,6 +5,7 @@ import azure.functions as func
 from ..server_functions.blob import azure_blob_helpers
 import datetime
 import pickle
+import json
 # from ..server_functions.eventhub import eventhub_utils
 
 
@@ -20,5 +21,20 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage], eventHubOutput
     
     # eventHubOutput.set(pickle.dumps(event_body))
     msg.set("Function trigger at {}".format(time_now.time()))
-    response = func.HttpResponse("message", status_code=200)
+
+    res_body = [
+        {
+        "name": "Chenghui Li",
+        "id": 2228
+        },
+        {
+        "name": "Kuan Lu",
+        "id": 1234
+        }
+    ]
+
+    res_headers = { 'Content-Type': 'application/json' }
+
+
+    response = func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=200)
     return response
