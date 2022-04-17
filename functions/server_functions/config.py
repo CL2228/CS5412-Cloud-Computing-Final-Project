@@ -47,6 +47,12 @@ eventHubRootConnectionString = "Endpoint=sb://cs5412-final-project-eventhub.serv
 
 
 ######################################################
+# IoT Configuration
+######################################################
+azureIotHubConnectString = "HostName=cs5412-final-project-iothub-standard.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=eBV/nd+87JztMwgOCNlJRmb6gIQanGdYJaDZ6GtuUxo="
+
+
+######################################################
 # Query URLs
 ######################################################
 imgBaseUrl = "http://localhost:7071/api/img-get?name="

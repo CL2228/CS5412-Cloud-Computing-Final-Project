@@ -5,6 +5,7 @@
 azure-functions
 azure-storage-blob
 azure-cognitiveservices-vision-face
+azure-iot-hub
 azure-eventhub
 pymongo
 pyjwt
