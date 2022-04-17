@@ -17,8 +17,7 @@ def main(events: List[func.EventHubEvent],
          msg: func.Out[func.QueueMessage]):
     for event in events:
         body = dict(pickle.loads(event.get_body()))
-        logging.info('[Event triggered]Core-verification-from-iot processed an event: %s',
-                     body)
+        logging.info('[Event triggered]Core-verification-from-iot, with payload: {}'.format(body))
         res_body = handle_one_event(event)
 
         if type(res_body) != dict:
