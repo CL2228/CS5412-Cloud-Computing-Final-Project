@@ -1,0 +1,22 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "events",
+      "direction": "in",
+      "eventHubName": "notify-iot-device-event",
+      "connection": "cs5412finalprojecteventhub_CoreNotifyIotDevice_EVENTHUB",
+      "cardinality": "many",
+      "consumerGroup": "$Default",
+      "dataType": "binary"
+    },
+    {
+      "type": "queue",
+      "direction": "out",
+      "name": "outputQueueItem",
+      "queueName": "core-notify-iot-device",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}
