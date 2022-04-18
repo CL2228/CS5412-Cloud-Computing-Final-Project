@@ -8,6 +8,13 @@
     'email': str
     'password': str
 
+    JWT payload:
+    {
+        'email':
+        '_id':
+    }
+
+
     Return: HTTP Response with JSON body
     'access-token': the token of this login operation
     'data': an object that contains the information of the account
