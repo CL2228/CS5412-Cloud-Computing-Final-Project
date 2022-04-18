@@ -328,69 +328,69 @@
 - ### **Sample response**:
     ```json
     {
-    "data": {
-        "tenant": {
-            "email": "cl2228@cornell.edu",
-            "first_name": "Chenghui",
-            "last_name": "Li",
-            "face_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
-            "units": {
-                "62475aaadd78bdc4e2448eb8": {
-                    "building_name": "GatesHall",
-                    "unit_number": "G01"
+        "data": {
+            "tenant": {
+                "email": "cl2228@cornell.edu",
+                "first_name": "Chenghui",
+                "last_name": "Li",
+                "face_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+                "units": {
+                    "62475aaadd78bdc4e2448eb8": {
+                        "building_name": "GatesHall",
+                        "unit_number": "G01"
+                    }
                 }
-            }
+            },
+            "units": [
+                {
+                    "unit": {
+                        "building_name": "GatesHall",
+                        "address": "Cornell University",
+                        "unit_number": "G01",
+                        "tenants": {
+                            "cl2228@cornell.edu": "6251ed05f429e641197c1a37"
+                        }
+                    },
+                    "records": [
+                        {
+                            "timestamp": 1650311531.197,
+                            "face_img": "gates-hall-g01/records/1eda61e0-4b71-4988-a7f4-832cf5553ad1.jpg",
+                            "ref_img": null,
+                            "verified": false,
+                            "verify_identity": "Stranger"
+                        },
+                        {
+                            "timestamp": 1650166130.593,
+                            "face_img": "gates-hall-g01/records/ee11dd9f-26d3-404f-a100-d2572dc6e0f7.jpg",
+                            "ref_img": null,
+                            "verified": false,
+                            "verify_identity": "Stranger"
+                        },
+                        {
+                            "timestamp": 1650161591.104,
+                            "face_img": "gates-hall-g01/records/653341e9-7b6f-409c-8b5b-01a603db8dfd.jpg",
+                            "ref_img": null,
+                            "verified": false,
+                            "verify_identity": "Stranger"
+                        },
+                        {
+                            "timestamp": 1650161401.851,
+                            "face_img": "gates-hall-g01/records/3e5fc0c6-8181-48cf-8820-ca407e54860d.jpg",
+                            "ref_img": null,
+                            "verified": false,
+                            "verify_identity": "Stranger"
+                        },
+                        {
+                            "timestamp": 1650158360.741,
+                            "face_img": "gates-hall-g01/records/f6f4ed64-a960-4f3d-8b62-fd7ff4b5cb99.jpg",
+                            "ref_img": null,
+                            "verified": false,
+                            "verify_identity": "Stranger"
+                        }
+                    ]
+                }
+            ]
         },
-        "units": [
-            {
-                "unit": {
-                    "building_name": "GatesHall",
-                    "address": "Cornell University",
-                    "unit_number": "G01",
-                    "tenants": {
-                        "cl2228@cornell.edu": "6251ed05f429e641197c1a37"
-                    }
-                },
-                "records": [
-                    {
-                        "timestamp": 1650311531.197,
-                        "face_img": "gates-hall-g01/records/1eda61e0-4b71-4988-a7f4-832cf5553ad1.jpg",
-                        "ref_img": null,
-                        "verified": false,
-                        "verify_identity": "Stranger"
-                    },
-                    {
-                        "timestamp": 1650166130.593,
-                        "face_img": "gates-hall-g01/records/ee11dd9f-26d3-404f-a100-d2572dc6e0f7.jpg",
-                        "ref_img": null,
-                        "verified": false,
-                        "verify_identity": "Stranger"
-                    },
-                    {
-                        "timestamp": 1650161591.104,
-                        "face_img": "gates-hall-g01/records/653341e9-7b6f-409c-8b5b-01a603db8dfd.jpg",
-                        "ref_img": null,
-                        "verified": false,
-                        "verify_identity": "Stranger"
-                    },
-                    {
-                        "timestamp": 1650161401.851,
-                        "face_img": "gates-hall-g01/records/3e5fc0c6-8181-48cf-8820-ca407e54860d.jpg",
-                        "ref_img": null,
-                        "verified": false,
-                        "verify_identity": "Stranger"
-                    },
-                    {
-                        "timestamp": 1650158360.741,
-                        "face_img": "gates-hall-g01/records/f6f4ed64-a960-4f3d-8b62-fd7ff4b5cb99.jpg",
-                        "ref_img": null,
-                        "verified": false,
-                        "verify_identity": "Stranger"
-                    }
-                ]
-            }
-        ]
-    },
-    "message": "Success"
-}
+        "message": "Success"
+    }
     ```
