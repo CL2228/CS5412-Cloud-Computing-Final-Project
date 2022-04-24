@@ -27,6 +27,7 @@ def handle_one_event(event: func.EventHubEvent):
         event_body = pickle.loads(event.get_body())
         payload = {"verified": event_body['verified'],
                    "timestamp": event_body['timestamp']}
+        # use IOT module to send a command to the IoT devices.
         iot_utils.send_message_to_device(event_body['device_id'], payload)
         return True, "Success"
     except Exception as ex:

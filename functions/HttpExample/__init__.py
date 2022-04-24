@@ -24,12 +24,7 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage], eventHubOutput
 
     res_body = [
         {
-        "name": "Chenghui Li",
-        "id": 2228
-        },
-        {
-        "name": "Kuan Lu",
-        "id": 1234
+        "name": "MZXCNMCNm"
         }
     ]
 
