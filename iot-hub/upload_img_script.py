@@ -22,7 +22,6 @@ async def upload_img_from_device(connection_string: str, file_path: str):
     try:
         await device_client.connect()
 
-
         # check whether the device is registered and get the unit id of this device
         device_existed, device_data = mongodb_utils.query_one("devices", {"device_key": DEVICE_KEY})
         if not device_existed:
