@@ -1,11 +1,8 @@
-import copy
-
 # from functions.server_functions.config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM
 from ..config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
 
 
 def send_plain_text(subject: str,
@@ -54,6 +51,7 @@ def send_html(subject: str, to: str, html_content: str, debug: bool = True):
         print(ex)
         return False
 
+
 if __name__ == "__main__":
     email_to = "g20170284@icloud.com"
 
@@ -69,13 +67,6 @@ if __name__ == "__main__":
     </body>
     </html>
     """.format("G01", "GatesHall", "2022-4-24", "https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg")
-
-    # msgText = MIMEText('<b>Some <i>HTML</i> text</b> and an image.<br><img src="https://www.cuvs.org/sites/default/files/2017-02/a-legacy_3.jpg"><br>Nifty!', 'html')
-    msgText = MIMEText('<b>宝 你的男朋友来给你问好了 <i>噢宝</i> 你好</b>.<br><img src="cid:image1"><br>宝!', 'html')
-
-    html_frame = '<html><body>Dear user,</br></br> and an image.</br><img src="{}"><br>END</body></html>'.format("https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg")
-    html_text = 'Dear user,</br></br> and an image.</br><img src="https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg"><br>Nifty!'.format("MZXCNMCNM")
-
 
     print(html_content)
     send_html("test email", email_to, html_content)
