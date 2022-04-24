@@ -29,7 +29,7 @@ def handle_one_event(event: func.EventHubEvent,
         logging.info("tenant list:{}".format(unit_data['tenants']))
 
         for tenant_email in unit_data['tenants'].keys():
-            email_highlevel_helper.send_warning_email(tenant_email, unit_data, event_body['timestamp'])
+            email_highlevel_helper.send_warning_email(tenant_email, unit_data, event_body)
         outputQueueItem.set("Successfully called at {}, with unit_id:{}".format(datetime.datetime.now(), event_body['unit_id']))
         return True, "success"
     except Exception as ex:

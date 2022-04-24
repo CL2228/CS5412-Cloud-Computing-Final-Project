@@ -36,7 +36,18 @@ There is a suspicious record in your unit {} , {} at {}. Please Login to the sys
 Thanks,
 CL 
 """,
-
+    "warning_html": """
+    <html>
+    <body>
+    Dear user, </br></br>
+    There is a suspicious entrance record of your apartment <b>{}, {}</b> at <i>{}</i>. 
+    Here is the photo taken from this record. Please log in to our system to check if action needed.</br></br>
+    Thanks.</br>
+    CL<br>
+    <img src="{}"></br>.
+    </body>
+    </html>
+    """
 }
 
 
