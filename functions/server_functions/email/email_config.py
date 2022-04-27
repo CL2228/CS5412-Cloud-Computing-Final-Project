@@ -44,7 +44,7 @@ CL
     Here is the photo taken from this record. Please log in to our system to check if action needed.</br></br>
     Thanks.</br>
     CL<br>
-    <img src="{}"></br>.
+    <img src="cid:image1"></br>.
     </body>
     </html>
     """

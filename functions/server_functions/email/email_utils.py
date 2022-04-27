@@ -3,6 +3,7 @@ from ..config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 
 
 def send_plain_text(subject: str,
@@ -27,7 +28,7 @@ def send_plain_text(subject: str,
         return False
 
 
-def send_html(subject: str, to: str, html_content: str, debug: bool = True):
+def send_html(subject: str, to: str, html_content: str, img_bytes: bytes, debug: bool = True):
     try:
         msgRoot = MIMEMultipart('related')
         msgRoot['Subject'] = subject
@@ -40,6 +41,10 @@ def send_html(subject: str, to: str, html_content: str, debug: bool = True):
 
         msgText = MIMEText(html_content, 'html')
         msgAlternative.attach(msgText)
+
+        msg_image = MIMEImage(img_bytes)
+        msg_image.add_header('Content-ID', '<image1>')
+        msgRoot.attach(msg_image)
 
         mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
         mail.set_debuglevel(debug)
@@ -63,11 +68,14 @@ if __name__ == "__main__":
     Here is the photo taken from this record. Please log in to our system to check if action needed.</br></br>
     Thanks.</br>
     CL<br>
-    <img src="{}"></br>.
+    <img src="cid:image1"></br>.
     </body>
     </html>
-    """.format("G01", "GatesHall", "2022-4-24", "https://cs5412-final-project.azurewebsites.net/api/img-get?name=gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg")
+    """.format("G01", "GatesHall", "2022-4-24")
 
-    print(html_content)
-    send_html("test email", email_to, html_content)
+    # print(html_content)
+    fp = open("./lch.png", "rb")
+    data = fp.read()
+    print(data)
+    send_html("test email", email_to, html_content, data)
 
