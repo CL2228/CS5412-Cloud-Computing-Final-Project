@@ -1,17 +1,33 @@
 import logging
 import json
-import azure.functions as func
 import datetime
-# from ..server_functions.mongodb import mongodb_utils
-# from ..server_functions.jwt.jwt_utils import generate_jwt
+import flask
+
+import json
+from numpy import reshape
+
+from flask import Flask, Request, Response, request
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+
+@app.route("/", methods=['GET', 'POST'])
+def func():
+    form = request.form
+    files = request.files
+    print(form.keys())
+    print(request.headers)
+    print(files)
+
+    res_headers = { 'Content-Type': 'application/json' }
+    res_body = {}
+    return Response(json.dumps({"msg": "hi"}), status=200, headers=res_headers)
+
 
 if __name__ == "__main__":
-    t1 = datetime.datetime.fromtimestamp(1649547831)
-    t2 = datetime.datetime.fromtimestamp(1649547232)
-    print(t1.time())
-    print(t2.time())
-    print(t2 < t1)
-
+    app.run()
 
 
 
