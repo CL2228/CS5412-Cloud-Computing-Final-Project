@@ -25,11 +25,11 @@ def main(events: List[func.EventHubEvent],
             continue
         msg.set(res_body['verify_identity'])
 
-        # writeRecordEventHub.set(pickle.dumps(res_body))
-        # garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
-        # notifyIotEventHub.set(pickle.dumps(res_body))
-        # if not res_body['verified']:
-        #     sendEmailEventHub.set(pickle.dumps(res_body))
+        writeRecordEventHub.set(pickle.dumps(res_body))
+        garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
+        notifyIotEventHub.set(pickle.dumps(res_body))
+        if not res_body['verified']:
+            sendEmailEventHub.set(pickle.dumps(res_body))
         logging.info("RESULT---------------------------------------")
         logging.info(res_body)
 
