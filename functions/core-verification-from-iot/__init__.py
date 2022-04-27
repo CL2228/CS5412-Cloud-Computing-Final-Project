@@ -25,13 +25,13 @@ def main(events: List[func.EventHubEvent],
             continue
         msg.set(res_body['verify_identity'])
 
-        writeRecordEventHub.set(pickle.dumps(res_body))
-        garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
-        notifyIotEventHub.set(pickle.dumps(res_body))
-        if not res_body['verified']:
-            sendEmailEventHub.set(pickle.dumps(res_body))
-        # logging.info("RESULT---------------------------------------")
-        # logging.info(res_body)
+        # writeRecordEventHub.set(pickle.dumps(res_body))
+        # garbageCollectionUnitEventHub.set(pickle.dumps({"unit_id": res_body['unit_id']}))
+        # notifyIotEventHub.set(pickle.dumps(res_body))
+        # if not res_body['verified']:
+        #     sendEmailEventHub.set(pickle.dumps(res_body))
+        logging.info("RESULT---------------------------------------")
+        logging.info(res_body)
 
 
 def handle_one_event(event: func.EventHubEvent):
@@ -53,22 +53,29 @@ def handle_one_event(event: func.EventHubEvent):
     try:
         # basic response body
         body = dict(pickle.loads(event.get_body()))
-        res_body['unit_id'] = body['unit_id']
-        res_body['device_id'] = body['device_id']
         res_body['blob_name'] = body['blob_name']
-        query_img_steam = BytesIO(azure_blob_helpers.read_blob(body['blob_name'])[1])
+
+        # retrieve device data from database to decide which unit to detect
+        device_existed, device_data = mongodb_utils.query_one("devices", {"device_key": body['device_key']})
+        if not device_existed:
+            logging.error("IoT device not found")
+            return "IoT device not found"
+        unit_id = device_data['unit_id']
+        res_body['unit_id'] = unit_id
+        res_body['device_id'] = device_data['device_id']
 
         # get query face
+        query_img_steam = BytesIO(azure_blob_helpers.read_blob(body['blob_name'])[1])
         query_face_detected, query_face_id = azure_face_helpers.get_faceId_with_stream(query_img_steam)
         if not query_face_detected:
             res_body['verify_identity'] = "Face not detected"
             return res_body
 
         # get unit information
-        unit_found, unit_data = mongodb_utils.query_one("units", {'_id': body['unit_id']})
+        unit_found, unit_data = mongodb_utils.query_one("units", {'_id': unit_id})
         if not unit_found:
-            res_body['verify_identity'] = "Unit not found"
-            return res_body
+            logging.error("Unit not found")
+            return "Unit not found"
 
         # get tenants associated with the unit and check if this person is a tenant
         tenants = unit_data['tenants']
@@ -90,7 +97,7 @@ def handle_one_event(event: func.EventHubEvent):
                 return res_body
 
         # check guests of this unit
-        guest_existed, guests = mongodb_utils.query_many("guests", {"unit": body['unit_id']})
+        guest_existed, guests = mongodb_utils.query_many("guests", {"unit": unit_id})
         if guest_existed:
             for guest in guests:
                 guest_token = guest['token']
@@ -108,12 +115,9 @@ def handle_one_event(event: func.EventHubEvent):
 
         res_body['verify_identity'] = "Stranger"
         return res_body
-    except KeyError:
-        return "illegal message"
+    except KeyError as ex:
+        logging.error(ex)
+        return str(ex)
     except Exception as ex:
-        return ex
-
-
-def handle_result(res_body):
-    if type(res_body) != dict:
-        return False
+        logging.error(ex)
+        return str(ex)
