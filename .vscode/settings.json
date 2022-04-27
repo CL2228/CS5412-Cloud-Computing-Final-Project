@@ -4,5 +4,11 @@
     "azureFunctions.pythonVenv": ".venv",
     "azureFunctions.projectLanguage": "Python",
     "azureFunctions.projectRuntime": "~4",
-    "debug.internalConsoleOptions": "neverOpen"
+    "debug.internalConsoleOptions": "neverOpen",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/bb0db898-d69e-405b-b987-9cf30c697704/resourceGroups/cs5412finalproject/providers/Microsoft.Web/sites/cs5412-final-project-frontend",
+    "appService.deploySubpath": "frontend"
 }
