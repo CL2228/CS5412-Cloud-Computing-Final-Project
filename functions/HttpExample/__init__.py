@@ -1,3 +1,5 @@
+from cmath import log
+from copyreg import constructor
 import logging
 
 import azure.functions as func
@@ -13,18 +15,22 @@ def main(req: func.HttpRequest, msg: func.Out[func.QueueMessage], eventHubOutput
     logging.info('Python HTTP trigger function processed a request.')
 
     time_now = datetime.datetime.now()
-
     # eventHubOutput
     event_body = {'device_id': "gates-hall-g01",
                   'blob_name': "gates-hall-g01/records/b2be69f0-c3ff-4801-9fad-ef2eec87e52b.jpg",
                   'unit_id': "62475aaadd78bdc4e2448eb8"}
     
     # eventHubOutput.set(pickle.dumps(event_body))
-    msg.set("Function trigger at {}".format(time_now.time()))
+    # msg.set("Function trigger at {}".format(time_now.time()))
+
+    val = req.form.get("name")
+    files = req.files
+    logging.info(files)
+    logging.info(req.form)
 
     res_body = [
         {
-        "name": "MZXCNMCNm"
+        "name": val
         }
     ]
 

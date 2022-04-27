@@ -34,23 +34,23 @@ async def upload_img_from_device(connection_string: str, device_key: str, file_p
         storage_info = await device_client.get_storage_info_for_blob(blob_name)
         print(storage_info['blobName'])
 
-        # sas_url = "https://{}/{}/{}{}".format(
-        #     storage_info['hostName'],
-        #     storage_info['containerName'],
-        #     storage_info['blobName'],
-        #     storage_info['sasToken']
-        # )
-        # print(sas_url)
-        #
-        # with BlobClient.from_blob_url(sas_url) as blob_client:
-        #     with open(file_path, "rb") as f:
-        #         print("saving")
-        #         result = blob_client.upload_blob(f, overwrite=True,
-        #                                          content_settings=ContentSettings(content_type='image/jpeg'))
-        #         print(result)
-        #
-        # event_payload = {"blob_name": storage_info['blobName'], "device_key": device_key}
-        # await event_hub_helper.send_event("verification-request-event", event_payload)
+        sas_url = "https://{}/{}/{}{}".format(
+            storage_info['hostName'],
+            storage_info['containerName'],
+            storage_info['blobName'],
+            storage_info['sasToken']
+        )
+        print(sas_url)
+
+        with BlobClient.from_blob_url(sas_url) as blob_client:
+            with open(file_path, "rb") as f:
+                print("saving")
+                result = blob_client.upload_blob(f, overwrite=True,
+                                                 content_settings=ContentSettings(content_type='image/jpeg'))
+                print(result)
+
+        event_payload = {"blob_name": storage_info['blobName'], "device_key": device_key}
+        await event_hub_helper.send_event("verification-request-event", event_payload)
         return True, "success"
     except FileNotFoundError:
         return False, "File Not Found."
