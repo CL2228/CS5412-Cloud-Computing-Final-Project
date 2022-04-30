@@ -9,35 +9,28 @@ function TestComponent (props) {
     const [count, setCount] = useState(props.name);
     const [file, setFile] = useState("");
 
-    function testFunc() {
+    function testFunc(e) {
+        e.preventDefault();
         let body = {
             "email": "cl2228@cornell.edu",
             "password": "cl2228.0284"
         };
         console.log("fuck");
-        // console.log(file);
         const formData = new FormData();
         // formData.getHeaders();
-        // formData.append("age", "323");
-        // formData.append("name", "cl2228")
-        formData.append("img", file)
+        formData.append("age", "323");
+        formData.append("name", "cl2228")
+        // formData.append("img", file)
         console.log(formData);
 
         axios.post("http://127.0.0.1:5000/", formData).then(res => {
+            console.log("success")
             console.log(res);
         }).catch(err => {
             console.log("err occurred");
             console.log(err);
             console.log(err.response);
         })
-        // console.log(formData.getHeaders());
-        // httpService.post("http://127.0.0.1:5000/", formData).then(res => {
-        //     console.log(res);
-        // }).catch(err => {
-        //     console.log("err occurred");
-        //     console.log(err);
-        //     console.log(err.response);
-        // })
     }
     // console.log(setCount)
     return (
@@ -51,9 +44,9 @@ function TestComponent (props) {
                 console.log(event.target.files[0]);
                 setFile(event.target.files[0]);
             }}/>
-            <button onClick={() => {
+            <button onClick={(event) => {
                 console.log(count);
-                testFunc();
+                testFunc(event);
             }}>
                 btn
             </button>

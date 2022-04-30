@@ -32,11 +32,9 @@ function UserLoginComponent(props) {
             setErrMsg("");
             setSuccessMsg("Login successfully, redirecting in 2s...");
             console.log(localStorage.getItem("token"));
-
             sleep(2000).then(() => {
-                routeChange("/");
+                navigate("/");
             });
-
         }).catch(error => {
             setSuccessMsg("");
             const errResMsg =
@@ -50,10 +48,9 @@ function UserLoginComponent(props) {
 
     return (
         <div>
-            <h1>Login Page</h1>
-            <button onClick={(e) => {
-                onClickTest();
-            }}>test</button>
+            {/*<button onClick={(e) => {*/}
+            {/*    onClickTest();*/}
+            {/*}}>test</button>*/}
             <form>
                 <h5>Log in</h5>
                 <InputGroup className="mb-lg-3">

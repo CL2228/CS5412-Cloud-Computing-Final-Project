@@ -17,13 +17,13 @@ CORS(app)
 def func():
     form = request.form
     files = request.files
-    print(form.keys())
-    print(request.headers)
+    print(form)
     print(files)
 
+
     res_headers = { 'Content-Type': 'application/json' }
-    res_body = {}
-    return Response(json.dumps({"msg": "hi"}), status=200, headers=res_headers)
+    res_body = {"msg": "hi"}
+    return Response(json.dumps(res_body), status=200, headers=res_headers)
 
 
 if __name__ == "__main__":

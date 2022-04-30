@@ -3,7 +3,7 @@ import config from "./config/config";
 
 
 export default axios.create({
-    baseURL: config.localBaseUrl,
+    baseURL: config.azureBaseUrl,
     headers: {
         'Content-Type': 'application/json'
     }
