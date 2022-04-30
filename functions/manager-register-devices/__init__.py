@@ -6,8 +6,8 @@
     Output: HTTP Response
 
     BODY: JSON
-    'device-key': the primary key of Azure IoT Hub devices
-    'device-id': the Device ID of Azure IoT Hub devices, usually means the name of that device
+    'auzre-iothub-device-key': the primary key of Azure IoT Hub devices
+    'azure-iothub-device-id': the Device ID of Azure IoT Hub devices, usually means the name of that device
     'unit_id': the unit ID, usually is the Object ID of Unit in MongoDB
 
 """
@@ -44,13 +44,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         res_body['message'] = "Updated successfully"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=200)
 
-    except ValueError:
+    except ValueError as ex:
+        logging.error(ex)
         res_body['message'] = "The body of the request must be JSON!"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-    except KeyError:
+    except KeyError as ex:
+        logging.error(ex)
         res_body['message'] = "Missing information"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-    except Exception:
+    except Exception as ex:
+        logging.error(ex)
         res_body['message'] = "Internal errors"
         return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
 

@@ -236,4 +236,12 @@ if __name__ == "__main__":
                       'reference_img': None,
                       'confidence': 0.0}
     # print(insert("records", data))
-    print(query_many("records", {}, sort_dict={'timestamp': 1}))
+    # print(query_many("records", {}, sort_dict={'timestamp': 1}))
+
+    unit_data = {
+        'building_name': "Phillips Hall",
+        'address': '343 Campus Rd',
+        'unit_number': '403',
+        'tenants': {}
+    }
+    print(insert("units", unit_data))
