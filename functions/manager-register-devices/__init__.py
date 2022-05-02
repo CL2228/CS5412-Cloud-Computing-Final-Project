@@ -6,7 +6,7 @@
     Output: HTTP Response
 
     BODY: JSON
-    'auzre-iothub-device-key': the primary key of Azure IoT Hub devices
+    'azure-iothub-device-key': the primary key of Azure IoT Hub devices
     'azure-iothub-device-id': the Device ID of Azure IoT Hub devices, usually means the name of that device
     'unit_id': the unit ID, usually is the Object ID of Unit in MongoDB
 
