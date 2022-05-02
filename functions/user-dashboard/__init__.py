@@ -40,6 +40,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                                                             projections={"_id": 0})
             if not unit_found:
                 continue
+            unit_data['unit_id'] = unit_id
             unit_datum['unit'] = unit_data
             _, records = mongodb_utils.query_many("records", {"unit_id": unit_id},
                                                   projections={'_id': 0, "device_id": 0, "unit_id": 0},
