@@ -188,7 +188,7 @@
     - `Content-Type`: `"application/json`
     - `x-access-token`: the token received from the login process.
 - ### **Body**: A JSON body should be provided
-    - `unit-id`: the ID of the unit.
+    - `unit-token`: a token used for registering this account to a unit.
 ## Response
 - ### A JSON is returned
 - `message`: A message that indicates the status of this query, no matter succeed or not.
