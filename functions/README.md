@@ -16,7 +16,7 @@
 - ### [**User Dashboard**](#dashboard)
 # **API Manual**
 
-****
+***
 
 # Register Account
 ## Overall
@@ -348,44 +348,48 @@
                         "address": "Cornell University",
                         "unit_number": "G01",
                         "tenants": {
-                            "cl2228@cornell.edu": "6251ed05f429e641197c1a37"
-                        }
+                            "cl2228@cornell.edu": "6251ed05f429e641197c1a37",
+                            "g20170284@icloud.com": "625a1dd897d9dcee07fe5600",
+                            "2820550021@qq.com": "626c02c018746627ccbf2d62",
+                            "jd2249@cornell.edu": "626d58ef314b4a2e2bab6d77"
+                        },
+                        "unit_id": "62475aaadd78bdc4e2448eb8"
                     },
                     "records": [
                         {
-                            "timestamp": 1650311531.197,
-                            "face_img": "gates-hall-g01/records/1eda61e0-4b71-4988-a7f4-832cf5553ad1.jpg",
+                            "timestamp": 1651376609.266,
+                            "face_img": "gates-hall-g01/records/5f01d235-4bd0-4aa2-aa87-090d98908ce4.jpg",
                             "ref_img": null,
                             "verified": false,
                             "verify_identity": "Stranger"
                         },
                         {
-                            "timestamp": 1650166130.593,
-                            "face_img": "gates-hall-g01/records/ee11dd9f-26d3-404f-a100-d2572dc6e0f7.jpg",
+                            "timestamp": 1651099000.787,
+                            "face_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+                            "ref_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+                            "verified": true,
+                            "verify_identity": "tenant: Chenghui Li"
+                        },
+                        {
+                            "timestamp": 1651086581.535,
+                            "face_img": "gates-hall-g01/records/f06f2c4d-d598-42e7-9bcc-2079989cff28.jpg",
                             "ref_img": null,
                             "verified": false,
                             "verify_identity": "Stranger"
                         },
                         {
-                            "timestamp": 1650161591.104,
-                            "face_img": "gates-hall-g01/records/653341e9-7b6f-409c-8b5b-01a603db8dfd.jpg",
-                            "ref_img": null,
-                            "verified": false,
-                            "verify_identity": "Stranger"
+                            "timestamp": 1651086501.755,
+                            "face_img": "gates-hall-g01/records/1175a7f5-e9be-46f9-88d4-5fba434c4d72.png",
+                            "ref_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+                            "verified": true,
+                            "verify_identity": "tenant: Chenghui Li"
                         },
                         {
-                            "timestamp": 1650161401.851,
-                            "face_img": "gates-hall-g01/records/3e5fc0c6-8181-48cf-8820-ca407e54860d.jpg",
-                            "ref_img": null,
-                            "verified": false,
-                            "verify_identity": "Stranger"
-                        },
-                        {
-                            "timestamp": 1650158360.741,
-                            "face_img": "gates-hall-g01/records/f6f4ed64-a960-4f3d-8b62-fd7ff4b5cb99.jpg",
-                            "ref_img": null,
-                            "verified": false,
-                            "verify_identity": "Stranger"
+                            "timestamp": 1651086414.544,
+                            "face_img": "gates-hall-g01/records/a9bd433b-cd4e-4788-bd2f-bb8bdabca55e.png",
+                            "ref_img": "tenants/6251ed05f429e641197c1a37/ebca445b-be87-407d-8267-5bdce0a65c95.png",
+                            "verified": true,
+                            "verify_identity": "tenant: Chenghui Li"
                         }
                     ]
                 }
