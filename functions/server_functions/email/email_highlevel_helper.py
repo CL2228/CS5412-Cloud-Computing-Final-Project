@@ -1,10 +1,10 @@
 import datetime
 import logging
-
 from ..email import email_utils
 from .email_config import EMAIL_SUBJECTS, EMAIL_BODIES, ALLOW_TYPES
 from ..config import imgBaseUrl
 from ..blob import azure_blob_helpers
+
 
 def send_token(msg_type: str, token: str, email_to: str):
     assert msg_type in ALLOW_TYPES
@@ -23,6 +23,21 @@ def send_warning_email(email_to: str,
     msg = EMAIL_BODIES['warning_html'].format(unit_data['unit_number'], unit_data['building_name'],
                                               datetime.datetime.fromtimestamp(verification_result['timestamp']))
     email_utils.send_html(subject=EMAIL_SUBJECTS['warning_record'], to=email_to, html_content=msg, img_bytes=blob_data)
+
+
+def send_new_tenant_invitation(token: str, unit_data: dict, email_to: str):
+    msg_backbone = """Dear user <{}>,
+
+You are invited to join the apartment: {}, {}. please use the verification code below to finish the registration.
+This account will be valid within 24 hours. Please copy and paste the whole token:
+
+{}
+    
+Thanks,
+CL
+""".format(email_to, unit_data['building_name'], unit_data['unit_number'], token)
+    subject = "[CS5412-CL2228] Unit registration invitation"
+    email_utils.send_plain_text(subject=subject, to=email_to, content=msg_backbone)
 
 
 if __name__ == "__main__":

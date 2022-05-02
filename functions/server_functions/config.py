@@ -36,6 +36,7 @@ EMAIL_FROM = "cs5412.cl2228@yahoo.com"
 jwtExpireMinutes = 1800
 jwtLoginExpireMinutes = 1800
 jwtGuestExpireMinutes = 30
+jwtNewTenantRegisterExpireMinutes = 1440
 jwtSecretKey = "cs5412-cl2228"
 jwtAlgorithm = "HS256"
 
