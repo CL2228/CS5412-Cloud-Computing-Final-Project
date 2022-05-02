@@ -1,3 +1,13 @@
+"""
+ This function is for removing a tenant from a unit
+
+    Request
+        Headers:
+            'x-access-token': the login token of a manager's account
+        Body(JSON):
+            'tenant-email': the email of the tenant's account
+            'unit-id': the unit ID of the building
+"""
 import copy
 import logging
 import json

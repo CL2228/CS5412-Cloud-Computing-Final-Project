@@ -1,3 +1,14 @@
+"""
+ This function is for adding a new unit to the system, authorized by a manager's account
+
+    Request
+        Headers:
+            'x-access-token': the login token of a manager's account
+        Body(JSON):
+            'building-name': name of the building
+            'unit-number': the unit number
+            'address': the address of the building
+"""
 import logging
 import json
 import azure.functions as func
