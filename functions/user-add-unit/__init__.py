@@ -17,18 +17,31 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         if token is None:
             res_body['message'] = "Token missing, please log in."
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
-        if "unit-id" not in req_body.keys():
-            res_body['message'] = "Information missing, please provide access token and unit ID"
+        if "unit-token" not in req_body.keys():
+            res_body['message'] = "Information missing, please provide access token and unit token"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=400)
 
-        unit_id = req_body['unit-id']
+        unit_token = req_body['unit-token']
 
-        # verify JWT
+        # verify user JWT
         jwt_status, jwt_payload = jwt_utils.verify_jwt(token)
         if not jwt_status:
             res_body['message'] = "Invalid token, please login again"
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
 
+        # verify unit token
+        unit_jwt_status, unit_jwt_payload = jwt_utils.verify_jwt(unit_token)
+        if not unit_jwt_status:
+            res_body['message'] = "Invalid token. Please check the token is correctly copied and pasted."
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
+        if "unit_id" not in unit_jwt_payload.keys() or "email" not in unit_jwt_payload.keys():
+            res_body['message'] = "Invalid token type. Please ensure that you are providing a token for registering a unit"
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=401)
+        if unit_jwt_payload['email'] != jwt_payload['email']:
+            res_body['message'] = "This unit registration doesn't belong to you."
+            return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=403)
+
+        unit_id = unit_jwt_payload['unit_id']
         # retrieve user account
         user_found, user_data = mongodb_utils.query_one("tenants",
                                                         {"email": jwt_payload['email'], "_id": jwt_payload['_id']})
