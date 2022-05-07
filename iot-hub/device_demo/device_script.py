@@ -14,6 +14,7 @@ DEVICE_CONN_STR = "HostName=cs5412-final-project-iothub-standard.azure-devices.n
 DEVICE_KEY = "ETLt4rqzS+1Fo1tOfzq+sKfMoPaG1c8sI9+9UmW6QT4="
 EVENT_HUB_NAME = "verification-request-event"
 
+
 ########################################################
 # Utils
 ########################################################
