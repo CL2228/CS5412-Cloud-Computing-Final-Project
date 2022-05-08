@@ -45,7 +45,6 @@ if __name__ == "__main__":
     event_body = {"device_key": "ETLt4rqzS+1Fo1tOfzq+sKfMoPaG1c8sI9+9UmW6QT4=",
                       "blob_name": tenant_blob}
 
-
     # res = asyncio.run(send_event("verification-request-event", event_body))
     # res = asyncio.run(send_event("write-records-event", res_event_body))
 

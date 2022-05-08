@@ -87,7 +87,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse(json.dumps(res_body), headers=res_headers, status_code=500)
 
         # update successfully, now delete old image in the Blob
-        delete_status, _ = azure_blob_helpers.delete_blob(old_img_blob)
+        # delete_status, _ = azure_blob_helpers.delete_blob(old_img_blob)
 
         res_body['message'] = "Update personal verification photo successfully"
         return func.HttpResponse(json.dumps(res_body), status_code=200, headers=res_headers)
