@@ -1,4 +1,4 @@
 # git ignore list
 
 .idea
-functions/server_functions/config.py
+config
