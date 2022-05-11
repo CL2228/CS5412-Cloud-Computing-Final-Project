@@ -1,5 +1,5 @@
 # **Azure Function HTTP Module**
-> This module is the core of this CS5412 final project. It contains **HTTP** serverless functions that suppor the central functionality of the project. Note that **only functions that receive HTTP requests** are included in this page because they are called by the frontend (why you need these instructions). Those functions that triggered by other Azure modules such as ***IoT Hub, Azure Event Hub*** are not opened to public frontends.
+> This module is the core of this CS5412 final project. It contains **HTTP** serverless functions that support the central functionality of the project. Note that **only functions that receive HTTP requests** are included in this page because they are called by the frontend (why you need these instructions). Those functions that triggered by other Azure modules such as ***IoT Hub, Azure Event Hub*** are not opened to public frontends.
 
 ## **Run this module**
 > There is **no need** for you to configure this module to run on your local computer or on Azure. All serverless functions are **already running** on Azure. The aim of this page is to provide instructions on how to use APIs I implemented.
